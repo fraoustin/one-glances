@@ -1,0 +1,31 @@
+body {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 16px;
+
+}
+
+#menu {
+    position: fixed;
+    left: 0;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+#menu > li {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+#content {
+    padding-left: 48px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+@media (max-width: 900px) {
+    .no-mobile {
+        display: none;
+    }
+}
