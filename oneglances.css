@@ -4,6 +4,14 @@ body {
 
 }
 
+.mdl-card {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.mdl-card__title-text {
+    font-weight: bold;
+}
+
 #menu {
     position: fixed;
     left: 0;
@@ -23,9 +31,76 @@ body {
     padding-bottom: 10px;
 }
 
+.box {
+    padding-right: 50px;
+    padding-bottom: 10px;
+    display: table;
+}
 
-@media (max-width: 900px) {
+.quickbox {
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding-left: 10px;
+    height: 48px;
+    display: table;
+    margin-bottom : 10px;
+    width: 23%;
+}
+
+.quickbox.default {
+    border-left-color: green;
+}
+
+.quickbox.careful {
+    border-left-color: blue;
+}
+
+.quickbox.warning {
+    border-left-color: orange;
+}
+
+.quickbox.critical {
+    border-left-color: red;
+}
+
+.quickbox h3 {
+    vertical-align: middle;
+    display: table-cell;
+    padding-left: 10px;
+}
+
+.quickbox .circles {
+    display: table-cell;
+}
+
+.flow {
+	display: flex;
+    flex-flow: row wrap;
+}
+
+.circles-decimals {
+    font-size: .4em;
+}
+.space-left {
+    margin-left: 10px;
+}
+
+@media (max-width: 500px) {
     .no-mobile {
         display: none;
+    }
+
+    .quickbox, .box {
+        width: 100%; 
+    }
+}
+
+@media (min-width: 500px) and (max-width: 900px) {
+    .no-mobile {
+        display: none;
+    }
+
+    .quickbox, .box {
+        width: 40%; 
     }
 }
