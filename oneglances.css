@@ -4,6 +4,14 @@ body {
 
 }
 
+.noborder {
+    border: none;
+}
+
+.center {
+    margin: auto;
+}
+
 .mdl-card {
     width: 100%;
     margin-bottom: 10px;
@@ -47,6 +55,10 @@ body {
     width: 23%;
 }
 
+.quickbox.grey {
+    border-left-color: grey;
+}
+
 .quickbox.default {
     border-left-color: green;
 }
@@ -81,8 +93,13 @@ body {
 .circles-decimals {
     font-size: .4em;
 }
+
 .space-left {
     margin-left: 10px;
+}
+
+.space-right {
+    margin-right: 10px;
 }
 
 @media (max-width: 500px) {

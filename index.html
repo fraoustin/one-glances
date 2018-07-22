@@ -68,13 +68,13 @@
                     <h2 class="mdl-card__title-text" id="quicklook-hostname"></h2>
                 </div>
                 <div class="mdl-card__supporting-text flow">
-                <div class="quickbox default"><div><div class="circles" id="circles-quicklook-cpu"></div><h3>CPU</h3></div></div>
-                <div class="quickbox careful"><div><div class="circles" id="circles-quicklook-mem"></div><h3>MEM</h3></div></div>
-                <div class="quickbox warning"><div><div class="circles" id="circles-quicklook-swap"></div><h3>SWAP</h3></div></div>
-                <div class="quickbox critical"><h3 id="quicklook-procs">PROCS</h3></div>
+                <div class="quickbox grey"><div><div class="circles" id="circles-quicklook-cpu"></div><h3>CPU</h3></div></div>
+                <div class="quickbox grey"><div><div class="circles" id="circles-quicklook-mem"></div><h3>MEM</h3></div></div>
+                <div class="quickbox grey"><div><div class="circles" id="circles-quicklook-swap"></div><h3>SWAP</h3></div></div>
+                <div class="quickbox grey"><h3 id="quicklook-procs">PROCS</h3></div>
                 </div>
                 <div class="mdl-card__menu">
-                    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                   <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="clickRefresh()">
                         <i class="material-icons">refresh</i>
                     </button>
                 </div>
@@ -183,10 +183,154 @@
                     </div>
                 </div>
             </div>
+            <div class="mdl-card mdl-shadow--2dp" id="load">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Load</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <div class="box">                     
+                        <table>
+                            <tr><td>Cpu-core</td><td><span class="space-left" id="load-cpucore"></span></td></tr>
+                        </table>
+                    </div>
+                    <div class="box">                     
+                        <table>
+                            <tr><td>1 min</td><td><span class="space-left" id="load-min1"></span></td></tr>  
+                            <tr><td>5 min</td><td><span class="space-left" id="load-min5"></span></td></tr>
+                            <tr><td>15 min</td><td><span class="space-left" id="load-min15"></span></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="alert">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Alert</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="network">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">NetWork</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">NetWork</th>
+                                <th>Rx/s</th>
+                                <th>Tx/s</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="port">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Port</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="diskio">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Disk I/O</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Disk I/O</th>
+                                <th>R/s</th>
+                                <th>W/s</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="filesys">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">File SYS</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Mount</th>
+                                <th>Name</th>
+                                <th>Used</th>
+                                <th>Total</th>
+                                <th>Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="sensor">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Sensor</h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="mdl-card mdl-shadow--2dp" id="thread">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Thread</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <span class="space-left space-right" id="thread-total"></span>
+                    (<span class="space-left space-right" id="thread-thread"></span> threads ),
+                    <span class="space-left space-right" id="thread-run"></span> run,
+                    <span class="space-left space-right" id="thread-sleep"></span> sleep
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__header--sorted-descending">CPU %</th>
+                                <th>NEM %</th>
+                                <th class="no-mobile">User</th>
+                                <th>Command</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
 </div>
 <script src="./dialog-polyfill/dialog-polyfill.js"></script>
+<script src="./config.js"></script>
 <script src="./oneglances.js"></script>
 </body>
 </html>

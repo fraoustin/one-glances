@@ -1,7 +1,4 @@
 console.log("run oneglances.js");
-var server = "127.0.0.1";
-var port = 61208;
-var url = "http://" + server + ":" + port + "/api/2/"
 
 var limit = null;
 var all =null;
@@ -14,12 +11,27 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
+function epochToDate(timestamp){
+    var d = new Date(timestamp*1000);
+    return (
+        d.getFullYear() + "-" + 
+        ("00" + (d.getMonth() + 1)).slice(-2) + "-" + 
+        ("00" + d.getDate()).slice(-2) + " " + 
+        ("00" + d.getHours()).slice(-2) + ":" + 
+        ("00" + d.getMinutes()).slice(-2) + ":" + 
+        ("00" + d.getSeconds()).slice(-2)
+    );
+}
 function FileConvertSize(aSize){
-	aSize = Math.abs(parseInt(aSize, 10));
-	var def = [[1, 'octets'], [1024, 'ko'], [1024*1024, 'Mo'], [1024*1024*1024, 'Go'], [1024*1024*1024*1024, 'To']];
-	for(var i=0; i<def.length; i++){
-		if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(2)+' '+def[i-1][1];
-	}
+    try {
+        aSize = Math.abs(parseInt(aSize, 10));
+        var def = [[1, 'octets'], [1024, 'ko'], [1024*1024, 'Mo'], [1024*1024*1024, 'Go'], [1024*1024*1024*1024, 'To']];
+        for(var i=0; i<def.length; i++){
+            if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(2)+' '+def[i-1][1];
+        }        
+    } catch (error) {
+        return aSize;
+    }
 }
 
 function callGlances(api, processRequest, method="GET", async=true, nextFct=null) {
@@ -41,9 +53,17 @@ function processRequestAll(e) {
         all = JSON.parse(e.target.responseText);
         viewQuickLook();
         viewSystem();
+        viewCpu();
         viewMemory();
         viewSwap();
-        viewCpu();
+        viewLoad();
+        viewAlert();
+        viewNetwork();
+        viewPort();
+        viewDiskIO();
+        viewFileSYS();
+        viewSensor();
+        viewThread();
     };
 }
 
@@ -112,52 +132,191 @@ function viewCpu() {
 
 }
 
+function viewLoad() {
+    document.getElementById("load-cpucore").innerText = all.load.cpucore;
+    document.getElementById("load-min1").innerText = all.load.min1;
+    document.getElementById("load-min5").innerText = all.load.min5;
+    document.getElementById("load-min15").innerText = all.load.min15;
+}
 
-function load()
+function viewAlert() {
+    var templateAlert=`<tr><td>spec0</td><td>spec1</td><td>spec2</td><td>spec3</td><td>spec4</td></tr>`
+    var alertTable = document.getElementById("alert").getElementsByTagName("tbody")[0];
+    while (alertTable.firstChild) {
+        alertTable.removeChild(alertTable.firstChild);
+    }
+    for (var i = 0; i < all.alert.length; ++i) {
+        alertTable.appendChild(htmlToElement(
+            templateAlert.replace("spec0",epochToDate(all.alert[i][0]))
+                            .replace("spec1",epochToDate(all.alert[i][1]))
+                            .replace("spec2",all.alert[i][2])
+                            .replace("spec3",all.alert[i][3])
+                            .replace("spec4",all.alert[i][4])
+                        ));
+    }
+}
+
+function viewNetwork() {
+    var templateNetwork=`<tr><td class="mdl-data-table__cell--non-numeric">specInterfaceName</td><td>specRx</td><td>specTx</td></tr>`
+    var networkTable = document.getElementById("network").getElementsByTagName("tbody")[0];
+    while (networkTable.firstChild) {
+        networkTable.removeChild(networkTable.firstChild);
+    }
+    for (var i = 0; i < all.network.length; ++i) {
+        if (all.network[i].rx > 0 && all.network[i].tx > 0) {
+            networkTable.appendChild(htmlToElement(
+                templateNetwork.replace("specInterfaceName",all.network[i].interface_name)
+                                .replace("specRx",FileConvertSize(all.network[i].rx))
+                                .replace("specTx",FileConvertSize(all.network[i].tx))
+                            ));            
+        }
+    }
+}
+
+function viewPort() {
+    var templatePort=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td></tr>`
+    var port = document.getElementById("port").getElementsByTagName("tbody")[0];
+    while (port.firstChild) {
+        port.removeChild(port.firstChild);
+    }
+    for (var i = 0; i < all.ports.length; ++i) {
+        port.appendChild(htmlToElement(
+            templatePort.replace("specName",all.ports[i].description)
+                .replace("specStatus",all.ports[i].status)
+            ));
+    }
+}
+
+function viewDiskIO() {
+    var templateDiskIO=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specRead/s</td><td>specWrite/s</td></tr>`
+    var diskio = document.getElementById("diskio").getElementsByTagName("tbody")[0];
+    while (diskio.firstChild) {
+        diskio.removeChild(diskio.firstChild);
+    }
+    for (var i = 0; i < all.diskio.length; ++i) {
+        diskio.appendChild(htmlToElement(
+            templateDiskIO.replace("specName",all.diskio[i].disk_name)
+                .replace("specRead",FileConvertSize(all.diskio[i].read_bytes))
+                .replace("specWrite",FileConvertSize(all.diskio[i].write_bytes))
+            ));
+    }
+}
+
+function viewFileSYS() {
+    var templateFileSYS=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specMnt</td><td>specUsed</td><td>specTotal</td><td>specPercent%</td></tr>`
+    var filesys = document.getElementById("filesys").getElementsByTagName("tbody")[0];
+    while (filesys.firstChild) {
+        filesys.removeChild(filesys.firstChild);
+    }
+    for (var i = 0; i < all.fs.length; ++i) {
+        filesys.appendChild(htmlToElement(
+            templateFileSYS.replace("specName",all.fs[i].mnt_point)
+                .replace("specMnt",all.fs[i].device_name)
+                .replace("specUsed",FileConvertSize(all.fs[i].used))
+                .replace("specTotal",FileConvertSize(all.fs[i].size))
+                .replace("specPercent",all.fs[i].percent)
+            ));
+    }
+}
+
+function viewSensor() {
+    var templateSensor=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specValue</td></tr>`
+    var sensor = document.getElementById("sensor").getElementsByTagName("tbody")[0];
+    while (sensor.firstChild) {
+        sensor.removeChild(sensor.firstChild);
+    }
+    for (var i = 0; i < all.sensors.length; ++i) {
+        sensor.appendChild(htmlToElement(
+            templateSensor.replace("specName",all.sensors[i].label)
+                .replace("specValue",all.sensors[i].value+all.sensors[i].unit)
+            ));
+    }
+}
+
+function viewThread() {
+    document.getElementById("thread-total").innerText = all.processcount.total;
+    document.getElementById("thread-thread").innerText = all.processcount.thread;
+    document.getElementById("thread-run").innerText = all.processcount.running;
+    document.getElementById("thread-sleep").innerText = all.processcount.sleeping;
+
+    var templateThread=`<tr><td>specCpu</td><td>specMem</td><td class="no-mobile">specUser</td><td>specCommand</td></tr>`
+    var thread = document.getElementById("thread").getElementsByTagName("tbody")[0];
+    while (thread.firstChild) {
+        thread.removeChild(thread.firstChild);
+    }
+    var procs = all.processlist
+    procs.sort(function (a, b) {
+        return a.cpu_percent < b.cpu_percent;
+    });
+    for (var i = 0; i < procs.length; ++i) {
+        thread.appendChild(htmlToElement(
+            templateThread.replace("specCpu",procs[i].cpu_percent)
+                .replace("specMem",(procs[i].memory_percent).toFixed(1))
+                .replace("specUser",procs[i].username)
+                .replace("specCommand",procs[i].name)
+            ));
+    }
+}
+
+
+function init()
 {
     circles.push(Circles.create({
         id:         "circles-quicklook-cpu",
         value:		0,
         radius:     24,
         width:      2,
-        colors:     ['#FFFFFF', 'green']
+        colors:     ['#FFFFFF', 'grey']
     }))
     circles.push(Circles.create({
         id:         "circles-quicklook-mem",
         value:		0,
         radius:     24,
         width:      2,
-        colors:     ['#FFFFFF', 'blue']
+        colors:     ['#FFFFFF', 'grey']
     }))
     circles.push(Circles.create({
         id:         "circles-quicklook-swap",
         value:		0,
         radius:     24,
         width:      2,
-        colors:     ['#FFFFFF', 'orange']
+        colors:     ['#FFFFFF', 'grey']
     }))
     circles.push(Circles.create({
         id:         "circles-memory-mem",
         value:		0,
         radius:     40,
         width:      10,
-        colors:     ['#FFFFFF', 'blue']
+        colors:     ['#FFFFFF', 'grey']
     }))
     circles.push(Circles.create({
         id:         "circles-swap-swap",
         value:		0,
         radius:     40,
         width:      10,
-        colors:     ['#FFFFFF', 'blue']
+        colors:     ['#FFFFFF', 'grey']
     }))
     circles.push(Circles.create({
         id:         "circles-cpu-cpu",
         value:		0,
         radius:     40,
         width:      10,
-        colors:     ['#FFFFFF', 'blue']
+        colors:     ['#FFFFFF', 'grey']
     }))
-    callGlances("all/limits", processRequestLimit);
 }
 
-load()
+function clickRefresh(){
+    callGlances("all", processRequestAll);
+}
+
+
+function Autorefresh(){
+    setTimeout(function(){
+        callGlances("all", processRequestAll);
+        Autorefresh();  
+     }, 10000);
+}
+
+init();
+callGlances("all/limits", processRequestLimit);
+Autorefresh();
