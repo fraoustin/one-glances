@@ -260,7 +260,7 @@ function viewThread() {
 }
 
 function viewDocker() {
-    if (all.docker> 0) {
+    if (all.docker) {
         document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
         var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
