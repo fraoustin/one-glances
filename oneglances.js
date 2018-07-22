@@ -260,10 +260,10 @@ function viewThread() {
 }
 
 function viewDocker() {
-    if (all.docker.length > 0) {
+    if (all.docker> 0) {
         document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-        var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td><td class="no-mobile">specCommand</td></tr>`
+        var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
         var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
         while (docker.firstChild) {
             docker.removeChild(docker.firstChild);
@@ -278,7 +278,6 @@ function viewDocker() {
                     .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
                     .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
                     .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
-                    .replace("specCommand",all.docker.containers[i].command[0])
                 ));
         }
 
