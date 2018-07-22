@@ -41,25 +41,28 @@
     <main class="mdl-layout__content">
         <ul class="mdl-list" id="menu">
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap">remove_red_eye</div>
+                <a href="#content"><div class="material-icons mdl-badge mdl-badge--overlap">remove_red_eye</div></a>
             </li>
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap" data-badge="0">announcement</div>
+                <a href="#cpu"><div class="material-icons mdl-badge mdl-badge--overlap">directions_run</div></a>
             </li>
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap">memory</div>
+                <a href="#memory"><div class="material-icons mdl-badge mdl-badge--overlap">memory</div></a>
             </li>
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap">settings</div>
+                <a href="#alert"><div class="material-icons mdl-badge mdl-badge--overlap">alarm</div></a>
             </li>
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap">dns</div>
+                <a href="#docker"><div class="material-icons mdl-badge mdl-badge--overlap">dock</div></a>
             </li>
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap">list</div>
+                <a href="#network"><div class="material-icons mdl-badge mdl-badge--overlap">wifi_tethering</div></a>
             </li>
             <li class="mdl-list__item">
-                <div class="material-icons mdl-badge mdl-badge--overlap">wifi_tethering</div>
+                <a href="#diskio"><div class="material-icons mdl-badge mdl-badge--overlap">storage</div></a>
+            </li>
+            <li class="mdl-list__item">
+                <a href="#thread"><div class="material-icons mdl-badge mdl-badge--overlap">reorder</div></a>
             </li>
         </ul>
         <div id="content">
@@ -213,6 +216,30 @@
                     </table>
                 </div>
             </div>
+            <div class="mdl-card mdl-shadow--2dp" id="docker">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Docker <span class="space-left" id="docker-info"></span></h2>
+                </div>
+                <div class="mdl-card__supporting-text flow">
+                    <table class="mdl-data-table center noborder">
+                        <thead>
+                            <tr>
+                                <th class="mdl-data-table__cell--non-numeric">Name</th>
+                                <th>Status</th>
+                                <th>CPU</th>
+                                <th>MEM</th>
+                                <th class="no-mobile">IOR</th>
+                                <th class="no-mobile">IOW</th>
+                                <th class="no-mobile">Rx/s</th>
+                                <th class="no-mobile">Tx/s</th>
+                                <th class="no-mobile">Command</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="mdl-card mdl-shadow--2dp" id="network">
                 <div class="mdl-card__title">
                     <h2 class="mdl-card__title-text">NetWork</h2>
@@ -308,8 +335,8 @@
                     <h2 class="mdl-card__title-text">Thread</h2>
                 </div>
                 <div class="mdl-card__supporting-text">
-                    <span class="space-left space-right" id="thread-total"></span>
-                    (<span class="space-left space-right" id="thread-thread"></span> threads ),
+                    <span class="space-left space-right" id="thread-total"></span> Tasks (
+                    <span class="space-left space-right" id="thread-thread"></span> threads ),
                     <span class="space-left space-right" id="thread-run"></span> run,
                     <span class="space-left space-right" id="thread-sleep"></span> sleep
                     <table class="mdl-data-table center noborder">
