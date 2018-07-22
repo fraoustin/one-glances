@@ -20,6 +20,9 @@ body {
     font-weight: bold;
 }
 
+.mdl-list__item a {
+    color: inherit;
+}
 #menu {
     position: fixed;
     left: 0;

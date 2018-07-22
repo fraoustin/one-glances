@@ -64,6 +64,7 @@ function processRequestAll(e) {
         viewFileSYS();
         viewSensor();
         viewThread();
+        viewDocker();
     };
 }
 
@@ -255,6 +256,33 @@ function viewThread() {
                 .replace("specUser",procs[i].username)
                 .replace("specCommand",procs[i].name)
             ));
+    }
+}
+
+function viewDocker() {
+    if (all.docker.length > 0) {
+        document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
+
+        var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td><td class="no-mobile">specCommand</td></tr>`
+        var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
+        while (docker.firstChild) {
+            docker.removeChild(docker.firstChild);
+        }
+        for (var i = 0; i < all.docker.containers.length; ++i) {
+            docker.appendChild(htmlToElement(
+                templateDocker.replace("specName",all.docker.containers[i].name)
+                    .replace("specStatus",all.docker.containers[i].Status)
+                    .replace("specCpu",(all.docker.containers[i].cpu_percent).toFixed(1))
+                    .replace("specMem",FileConvertSize(all.docker.containers[i].memory_usage))
+                    .replace("specWrite",FileConvertSize(all.docker.containers[i].io_w))
+                    .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
+                    .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
+                    .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
+                    .replace("specCommand",all.docker.containers[i].command[0])
+                ));
+        }
+
+        
     }
 }
 
