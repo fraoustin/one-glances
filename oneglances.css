@@ -1,0 +1,123 @@
+body {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 16px;
+
+}
+
+.noborder {
+    border: none;
+}
+
+.center {
+    margin: auto;
+}
+
+.mdl-card {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.mdl-card__title-text {
+    font-weight: bold;
+}
+
+#menu {
+    position: fixed;
+    left: 0;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+#menu > li {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+}
+#content {
+    padding-left: 48px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.box {
+    padding-right: 50px;
+    padding-bottom: 10px;
+    display: table;
+}
+
+.quickbox {
+    border-left-width: 5px;
+    border-left-style: solid;
+    padding-left: 10px;
+    height: 48px;
+    display: table;
+    margin-bottom : 10px;
+    width: 23%;
+}
+
+.quickbox.grey {
+    border-left-color: grey;
+}
+
+.quickbox.default {
+    border-left-color: green;
+}
+
+.quickbox.careful {
+    border-left-color: blue;
+}
+
+.quickbox.warning {
+    border-left-color: orange;
+}
+
+.quickbox.critical {
+    border-left-color: red;
+}
+
+.quickbox h3 {
+    vertical-align: middle;
+    display: table-cell;
+    padding-left: 10px;
+}
+
+.quickbox .circles {
+    display: table-cell;
+}
+
+.flow {
+	display: flex;
+    flex-flow: row wrap;
+}
+
+.circles-decimals {
+    font-size: .4em;
+}
+
+.space-left {
+    margin-left: 10px;
+}
+
+.space-right {
+    margin-right: 10px;
+}
+
+@media (max-width: 500px) {
+    .no-mobile {
+        display: none;
+    }
+
+    .quickbox, .box {
+        width: 100%; 
+    }
+}
+
+@media (min-width: 500px) and (max-width: 900px) {
+    .no-mobile {
+        display: none;
+    }
+
+    .quickbox, .box {
+        width: 40%; 
+    }
+}
