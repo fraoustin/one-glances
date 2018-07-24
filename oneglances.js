@@ -102,7 +102,7 @@ function viewQuickLook() {
     updateColorElt(document.getElementById("quickbox-mem"), [limit.quicklook.mem_careful, limit.quicklook.mem_warning, limit.quicklook.mem_critical] , all.quicklook.mem)
     circles[2].update(all.quicklook.swap);
     updateColorCircle(circles[2], [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
-    updateColorElt(document.getElementById("quickbox-swaps"), [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
+    updateColorElt(document.getElementById("quickbox-swap"), [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
     document.getElementById("quicklook-procs").innerText = all.processcount.total + " PROCESS";
 }
 
