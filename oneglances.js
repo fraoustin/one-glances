@@ -96,10 +96,13 @@ function viewQuickLook() {
     document.getElementById("quicklook-hostname").innerText = all.system.hostname;
     circles[0].update(all.quicklook.cpu);
     updateColorCircle(circles[0], [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.quicklook.cpu)
+    updateColorElt(document.getElementById("quickbox-cpu"), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.quicklook.cpu)
     circles[1].update(all.quicklook.mem);
     updateColorCircle(circles[1], [limit.quicklook.mem_careful, limit.quicklook.mem_warning, limit.quicklook.mem_critical] , all.quicklook.mem)
+    updateColorElt(document.getElementById("quickbox-mem"), [limit.quicklook.mem_careful, limit.quicklook.mem_warning, limit.quicklook.mem_critical] , all.quicklook.mem)
     circles[2].update(all.quicklook.swap);
     updateColorCircle(circles[2], [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
+    updateColorElt(document.getElementById("quickbox-mem"), [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
     document.getElementById("quicklook-procs").innerText = all.processcount.total + " PROCESS";
 }
 
@@ -126,8 +129,8 @@ function viewMemory() {
 }
 
 function viewSwap() {
-    circles[4].update(all.swap.percent);
-    updateColorCircle(circles[4], [limit.memswap.memswap_careful, limit.memswap.memswap_warning, limit.memswap.memswap_critical] , all.swap.percent);
+    circles[4].update(all.memswap.percent);
+    updateColorCircle(circles[4], [limit.memswap.memswap_careful, limit.memswap.memswap_warning, limit.memswap.memswap_critical] , all.memswap.percent);
     document.getElementById("swap-sout").innerText = FileConvertSize(all.memswap.sout);
     document.getElementById("swap-used").innerText = FileConvertSize(all.memswap.used);
     document.getElementById("swap-total").innerText = FileConvertSize(all.memswap.total);
