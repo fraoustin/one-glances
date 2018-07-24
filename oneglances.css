@@ -61,18 +61,22 @@ body {
 
 .default, .default > circles-text {
     color: green;
+    font-weight: bold;
 }
 
 .careful, .careful > circles-text  {
     color: blue;
+    font-weight: bold;
 }
 
 .warning, .warning > circles-text  {
     color: orange;
+    font-weight: bold;
 }
 
 .critical, .critical > circles-text  {
     color: red;
+    font-weight: bold;
 }
 
 .quickbox.grey {

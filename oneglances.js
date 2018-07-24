@@ -117,6 +117,7 @@ function viewSystem() {
 function viewMemory() {
     circles[3].update(all.mem.percent);
     updateColorCircle(circles[3], [limit.mem.mem_careful, limit.mem.mem_warning, limit.mem.mem_critical] , all.mem.percent);
+    updateColorElt(document.getElementById("circles-memory-mem"), [limit.mem.mem_careful, limit.mem.mem_warning, limit.mem.mem_critical] , all.mem.percent);
     document.getElementById("memory-available").innerText = FileConvertSize(all.mem.available);
     document.getElementById("memory-used").innerText = FileConvertSize(all.mem.used);
     document.getElementById("memory-cached").innerText = FileConvertSize(all.mem.cached);
@@ -131,6 +132,7 @@ function viewMemory() {
 function viewSwap() {
     circles[4].update(all.memswap.percent);
     updateColorCircle(circles[4], [limit.memswap.memswap_careful, limit.memswap.memswap_warning, limit.memswap.memswap_critical] , all.memswap.percent);
+    updateColorElt(document.getElementById("circles-swap-swap"), [limit.memswap.memswap_careful, limit.memswap.memswap_warning, limit.memswap.memswap_critical] , all.memswap.percent);
     document.getElementById("swap-sout").innerText = FileConvertSize(all.memswap.sout);
     document.getElementById("swap-used").innerText = FileConvertSize(all.memswap.used);
     document.getElementById("swap-total").innerText = FileConvertSize(all.memswap.total);
@@ -141,6 +143,7 @@ function viewSwap() {
 function viewCpu() {
     circles[5].update(all.cpu.total);
     updateColorCircle(circles[5], [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.cpu.total);
+    updateColorElt(document.getElementById("circles-cpu-cpu"), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.cpu.total);
     document.getElementById("cpu-user").innerText = all.cpu.user;
     updateColorElt(document.getElementById("cpu-user"), [limit.cpu.cpu_user_careful, limit.cpu.cpu_user_warning, limit.cpu.cpu_user_critical] , all.cpu.user);
     document.getElementById("cpu-system").innerText = all.cpu.system;
