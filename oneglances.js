@@ -102,7 +102,7 @@ function viewQuickLook() {
     updateColorElt(document.getElementById("quickbox-mem"), [limit.quicklook.mem_careful, limit.quicklook.mem_warning, limit.quicklook.mem_critical] , all.quicklook.mem)
     circles[2].update(all.quicklook.swap);
     updateColorCircle(circles[2], [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
-    updateColorElt(document.getElementById("quickbox-mem"), [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
+    updateColorElt(document.getElementById("quickbox-swaps"), [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
     document.getElementById("quicklook-procs").innerText = all.processcount.total + " PROCESS";
 }
 
@@ -331,42 +331,42 @@ function init()
         value:		0,
         radius:     24,
         width:      2,
-        colors:    ['#FFFFFF', 'grey']
+        colors:    ['#FFFFFF', 'green']
     }))
     circles.push(Circles.create({
         id:         "circles-quicklook-mem",
         value:		0,
         radius:     24,
         width:      2,
-        colors:     ['#FFFFFF', 'grey']
+        colors:     ['#FFFFFF', 'green']
     }))
     circles.push(Circles.create({
         id:         "circles-quicklook-swap",
         value:		0,
         radius:     24,
         width:      2,
-        colors:     ['#FFFFFF', 'grey']
+        colors:     ['#FFFFFF', 'green']
     }))
     circles.push(Circles.create({
         id:         "circles-memory-mem",
         value:		0,
         radius:     40,
         width:      10,
-        colors:     ['#FFFFFF', 'grey']
+        colors:     ['#FFFFFF', 'green']
     }))
     circles.push(Circles.create({
         id:         "circles-swap-swap",
         value:		0,
         radius:     40,
         width:      10,
-        colors:     ['#FFFFFF', 'grey']
+        colors:     ['#FFFFFF', 'green']
     }))
     circles.push(Circles.create({
         id:         "circles-cpu-cpu",
         value:		0,
         radius:     40,
         width:      10,
-        colors:     ['#FFFFFF', 'grey']
+        colors:     ['#FFFFFF', 'green']
     }))
 }
 

@@ -62,20 +62,24 @@ body {
     border-left-color: grey;
 }
 
-.quickbox.default {
+.quickbox.default, .quickbox.default > circles-text {
     border-left-color: green;
+    color: green;
 }
 
-.quickbox.careful {
+.quickbox.careful, .quickbox.careful > circles-text  {
     border-left-color: blue;
+    color: blue;
 }
 
-.quickbox.warning {
+.quickbox.warning, .quickbox.warning > circles-text  {
     border-left-color: orange;
+    color: orange;
 }
 
-.quickbox.critical {
+.quickbox.critical, .quickbox.critical > circles-text  {
     border-left-color: red;
+    color: red;
 }
 
 .quickbox h3 {
