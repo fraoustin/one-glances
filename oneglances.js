@@ -7,7 +7,7 @@ var colorCircle = ['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
 
 function updateColorElt(elt, levels, value) {
-    // levels: normal, careful, warning, critical
+    // levels: careful, warning, critical
     color = colorClassName[0];
     for (var i = 0; i < levels; ++i) {
         if (value >= levels[i]) { color = colorClassName[i+1]}
@@ -17,6 +17,8 @@ function updateColorElt(elt, levels, value) {
         if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
     };
     elt.classList.add(color);
+    console.log(elt)
+    console.log(color)
 }
 
 function updateColorCircle(ci, levels, value) {
