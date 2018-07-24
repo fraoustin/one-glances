@@ -328,7 +328,7 @@ function init()
         value:		0,
         radius:     24,
         width:      2,
-        colors:    c
+        colors:    ['#FFFFFF', 'grey']
     }))
     circles.push(Circles.create({
         id:         "circles-quicklook-mem",
