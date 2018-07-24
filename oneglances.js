@@ -208,7 +208,7 @@ function viewAlert() {
 }
 
 function viewNetwork() {
-    var templateNetwork=`<tr><td class="mdl-data-table__cell--non-numeric">specInterfaceName</td><td>specRx</td><td>specTx</td></tr>`
+    var templateNetwork=`<tr id="netspecId"><td class="mdl-data-table__cell--non-numeric">specInterfaceName</td><td>specRx</td><td>specTx</td></tr>`
     var networkTable = document.getElementById("network").getElementsByTagName("tbody")[0];
     while (networkTable.firstChild) {
         networkTable.removeChild(networkTable.firstChild);
@@ -219,7 +219,10 @@ function viewNetwork() {
                 templateNetwork.replace("specInterfaceName",all.network[i].interface_name)
                                 .replace("specRx",FileConvertSize(all.network[i].rx))
                                 .replace("specTx",FileConvertSize(all.network[i].tx))
-                            ));            
+                                .replace("specId",i)
+                            ));
+            updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[1], [limit.network.network_rx_careful, limit.network.network_rx_warning, limit.network.network_rx_critical] , all.network[i].rx);    
+            updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[2], [limit.network.network_tx_careful, limit.network.network_tx_warning, limit.network.network_tx_critical] , all.network[i].tx);  
         }
     }
 }
@@ -259,7 +262,7 @@ function viewDiskIO() {
 }
 
 function viewFileSYS() {
-    var templateFileSYS=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specMnt</td><td>specUsed</td><td>specTotal</td><td>specPercent%</td></tr>`
+    var templateFileSYS=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specMnt</td><td>specUsed</td><td>specTotal</td><td id="fsspecId">specPercent%</td></tr>`
     var filesys = document.getElementById("filesys").getElementsByTagName("tbody")[0];
     while (filesys.firstChild) {
         filesys.removeChild(filesys.firstChild);
@@ -271,7 +274,9 @@ function viewFileSYS() {
                 .replace("specUsed",FileConvertSize(all.fs[i].used))
                 .replace("specTotal",FileConvertSize(all.fs[i].size))
                 .replace("specPercent",all.fs[i].percent)
+                .replace("speId",i)
             ));
+        updateColorElt(document.getElementById("fs"+i), [limit.fs.fs_careful, limit.fs.fs_warning, limit.fs.fs_critical] , all.fs[i].percent);
     }
 }
 
