@@ -3,6 +3,30 @@ console.log("run oneglances.js");
 var limit = null;
 var all =null;
 var circles = [];
+var colorCircle = ['green', 'blue', 'orange', 'red'];
+var colorClassName = ['default', 'careful', 'warning', 'critical'];
+
+function updateColorElt(elt, levels, value) {
+    // levels: normal, careful, warning, critical
+    color = colorClassName[0];
+    for (var i = 0; i < levels; ++i) {
+        if (value >= levels[i]) { color = colorClassName[i+1]}
+    };
+    // cleanColor
+    for (var i = 0; i < colorClassName; ++i) {
+        if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
+    };
+    elt.classList.add(color);
+}
+
+function updateColorCircle(ci, levels, value) {
+    // levels: careful, warning, critical
+    color = colorCircle[0];
+    for (var i = 0; i < levels; ++i) {
+        if (value >= levels[i]) { color = colorCircle[i+1]}
+    };
+    ci.updateColors(['#FFFFFF', color]);
+}
 
 function htmlToElement(html) {
     var template = document.createElement('template');
@@ -71,8 +95,11 @@ function processRequestAll(e) {
 function viewQuickLook() {
     document.getElementById("quicklook-hostname").innerText = all.system.hostname;
     circles[0].update(all.quicklook.cpu);
+    updateColorCircle(circles[0], [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.quicklook.cpu)
     circles[1].update(all.quicklook.mem);
+    updateColorCircle(circles[1], [limit.quicklook.mem_careful, limit.quicklook.mem_warning, limit.quicklook.mem_critical] , all.quicklook.mem)
     circles[2].update(all.quicklook.swap);
+    updateColorCircle(circles[2], [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
     document.getElementById("quicklook-procs").innerText = all.processcount.total + " PROCESS";
 }
 
@@ -86,6 +113,7 @@ function viewSystem() {
 
 function viewMemory() {
     circles[3].update(all.mem.percent);
+    updateColorCircle(circles[3], [limit.mem.mem_careful, limit.mem.mem_warning, limit.mem.mem_critical] , all.mem.percent);
     document.getElementById("memory-available").innerText = FileConvertSize(all.mem.available);
     document.getElementById("memory-used").innerText = FileConvertSize(all.mem.used);
     document.getElementById("memory-cached").innerText = FileConvertSize(all.mem.cached);
@@ -98,7 +126,8 @@ function viewMemory() {
 }
 
 function viewSwap() {
-    circles[4].update(all.cpu.percent);
+    circles[4].update(all.swap.percent);
+    updateColorCircle(circles[4], [limit.memswap.memswap_careful, limit.memswap.memswap_warning, limit.memswap.memswap_critical] , all.swap.percent);
     document.getElementById("swap-sout").innerText = FileConvertSize(all.memswap.sout);
     document.getElementById("swap-used").innerText = FileConvertSize(all.memswap.used);
     document.getElementById("swap-total").innerText = FileConvertSize(all.memswap.total);
@@ -108,14 +137,20 @@ function viewSwap() {
 
 function viewCpu() {
     circles[5].update(all.cpu.total);
+    updateColorCircle(circles[5], [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.cpu.total);
     document.getElementById("cpu-user").innerText = all.cpu.user;
+    updateColorElt(document.getElementById("cpu-user"), [limit.cpu.cpu_user_careful, limit.cpu.cpu_user_warning, limit.cpu.cpu_user_critical] , all.cpu.user);
     document.getElementById("cpu-system").innerText = all.cpu.system;
+    updateColorElt(document.getElementById("cpu-system"), [limit.cpu.cpu_system_careful, limit.cpu.cpu_system_warning, limit.cpu.cpu_system_critical] , all.cpu.system);
     document.getElementById("cpu-idle").innerText = all.cpu.idle;
     document.getElementById("cpu-nice").innerText = all.cpu.nice;
     document.getElementById("cpu-irq").innerText = all.cpu.irq;
     document.getElementById("cpu-iowait").innerText = all.cpu.iowait;
+    updateColorElt(document.getElementById("cpu-iowait"), [limit.cpu.cpu_iowait_careful, limit.cpu.cpu_iowait_warning, limit.cpu.cpu_iowait_critical] , all.cpu.iowait);
     document.getElementById("cpu-steal").innerText = all.cpu.steal;
+    updateColorElt(document.getElementById("cpu-steal"), [limit.cpu.cpu_steal_careful, limit.cpu.cpu_steal_warning, limit.cpu.cpu_steal_critical] , all.cpu.steal);
     document.getElementById("cpu-ctx_sw").innerText = all.cpu.ctx_switches;
+    updateColorElt(document.getElementById("cpu-ctx_sw"), [limit.cpu.cpu_ctx_switches_careful, limit.cpu.cpu_ctx_switches_warning, limit.cpu.cpu_ctx_switches_critical] , all.cpu.ctx_switches);
     document.getElementById("cpu-inter").innerText = all.cpu.interrupts;
     document.getElementById("cpu-sw_int").innerText = all.cpu.soft_interrupts;
 
@@ -293,7 +328,7 @@ function init()
         value:		0,
         radius:     24,
         width:      2,
-        colors:     ['#FFFFFF', 'grey']
+        colors:    c
     }))
     circles.push(Circles.create({
         id:         "circles-quicklook-mem",
