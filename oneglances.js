@@ -6,6 +6,14 @@ var circles = [];
 var colorCircle = ['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
 
+function defaultJson(parent, son, def) {
+    try {
+        return parent[son]
+    } catch (error) {
+        return def
+    }
+}
+
 function updateColorElt(elt, levels, value) {
     // levels: careful, warning, critical
     color = colorClassName[0];
@@ -176,6 +184,7 @@ function viewCpu() {
 
 function viewLoad() {
     document.getElementById("load-cpucore").innerText = all.load.cpucore;
+    updateColorElt(document.getElementById("load-cpucore"), [limit.load.load_careful, limit.load.load_warning, limit.load.load_critical] , all.load.cpucore);
     document.getElementById("load-min1").innerText = all.load.min1;
     document.getElementById("load-min5").innerText = all.load.min5;
     document.getElementById("load-min15").innerText = all.load.min15;
@@ -216,7 +225,7 @@ function viewNetwork() {
 }
 
 function viewPort() {
-    var templatePort=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td></tr>`
+    var templatePort=`<tr><td id="portspecId" class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
     var port = document.getElementById("port").getElementsByTagName("tbody")[0];
     while (port.firstChild) {
         port.removeChild(port.firstChild);
@@ -225,7 +234,12 @@ function viewPort() {
         port.appendChild(htmlToElement(
             templatePort.replace("specName",all.ports[i].description)
                 .replace("specStatus",all.ports[i].status)
+                .replace("specElapsed",defaultJson(all.ports[i], "elapsed", ""))
+                .replace("specid",i)
             ));
+        if (all.ports[i].status == false) {
+            document.getElementById("port"+i).classList.add("critical")
+        }
     }
 }
 
@@ -262,7 +276,7 @@ function viewFileSYS() {
 }
 
 function viewSensor() {
-    var templateSensor=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specValue</td></tr>`
+    var templateSensor=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td id="sensorspecId">specValue</td></tr>`
     var sensor = document.getElementById("sensor").getElementsByTagName("tbody")[0];
     while (sensor.firstChild) {
         sensor.removeChild(sensor.firstChild);
@@ -271,7 +285,9 @@ function viewSensor() {
         sensor.appendChild(htmlToElement(
             templateSensor.replace("specName",all.sensors[i].label)
                 .replace("specValue",all.sensors[i].value+all.sensors[i].unit)
+                .replace("specId",i)
             ));
+        updateColorElt(document.getElementById("sensor"+i), [limit.sensors[all.sensors[i].type+"_careful"], limit.sensors[all.sensors[i].type+"_warning"], limit.sensors[all.sensors[i].type+"_critical"]] , all.sensors[i].value);
     }
 }
 
@@ -281,7 +297,7 @@ function viewThread() {
     document.getElementById("thread-run").innerText = all.processcount.running;
     document.getElementById("thread-sleep").innerText = all.processcount.sleeping;
 
-    var templateThread=`<tr><td>specCpu</td><td>specMem</td><td class="no-mobile">specUser</td><td>specCommand</td></tr>`
+    var templateThread=`<tr id="threadspecId"><td>specCpu</td><td>specMem</td><td class="no-mobile">specUser</td><td>specCommand</td></tr>`
     var thread = document.getElementById("thread").getElementsByTagName("tbody")[0];
     while (thread.firstChild) {
         thread.removeChild(thread.firstChild);
@@ -296,7 +312,10 @@ function viewThread() {
                 .replace("specMem",(procs[i].memory_percent).toFixed(1))
                 .replace("specUser",procs[i].username)
                 .replace("specCommand",procs[i].name)
+                .replace("specId",i)
             ));
+        updateColorElt(document.getElementById("thread"+i).getElementsByTagName('td')[0], [limit.processlist.processlist_cpu_careful, limit.processlist.processlist_cpu_warning, limit.processlist.processlist_cpu_critical] , procs[i].cpu_percent);
+        updateColorElt(document.getElementById("thread"+i).getElementsByTagName('td')[1], [limit.processlist.processlist_mem_careful, limit.processlist.processlist_mem_warning, limit.processlist.processlist_mem_critical] , procs[i].memory_percent);
     }
 }
 
