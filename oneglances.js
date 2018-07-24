@@ -274,7 +274,7 @@ function viewFileSYS() {
                 .replace("specUsed",FileConvertSize(all.fs[i].used))
                 .replace("specTotal",FileConvertSize(all.fs[i].size))
                 .replace("specPercent",all.fs[i].percent)
-                .replace("speId",i)
+                .replace("specId",i)
             ));
         updateColorElt(document.getElementById("fs"+i), [limit.fs.fs_careful, limit.fs.fs_warning, limit.fs.fs_critical] , all.fs[i].percent);
     }
