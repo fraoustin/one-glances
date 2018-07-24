@@ -228,7 +228,7 @@ function viewNetwork() {
 }
 
 function viewPort() {
-    var templatePort=`<tr><td id="portspecId" class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
+    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
     var port = document.getElementById("port").getElementsByTagName("tbody")[0];
     while (port.firstChild) {
         port.removeChild(port.firstChild);
@@ -241,7 +241,9 @@ function viewPort() {
                 .replace("specid",i)
             ));
         if (all.ports[i].status == false) {
-            document.getElementById("port"+i).classList.add("critical")
+            document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("critical")
+        } else {
+            document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("default")
         }
     }
 }
