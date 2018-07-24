@@ -17,8 +17,6 @@ function updateColorElt(elt, levels, value) {
         if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
     };
     elt.classList.add(color);
-    console.log(elt)
-    console.log(color)
 }
 
 function updateColorCircle(ci, levels, value) {

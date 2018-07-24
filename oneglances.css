@@ -58,28 +58,41 @@ body {
     width: 23%;
 }
 
+
+.default, .default > circles-text {
+    color: green;
+}
+
+.careful, .careful > circles-text  {
+    color: blue;
+}
+
+.warning, .warning > circles-text  {
+    color: orange;
+}
+
+.critical, .critical > circles-text  {
+    color: red;
+}
+
 .quickbox.grey {
     border-left-color: grey;
 }
 
-.quickbox.default, .default > circles-text {
+.quickbox.defaultt {
     border-left-color: green;
-    color: green;
 }
 
-.quickbox.careful, .careful > circles-text  {
+.quickbox.careful  {
     border-left-color: blue;
-    color: blue;
 }
 
-.quickbox.warning, .warning > circles-text  {
+.quickbox.warning  {
     border-left-color: orange;
-    color: orange;
 }
 
-.quickbox.critical, .critical > circles-text  {
+.quickbox.critical  {
     border-left-color: red;
-    color: red;
 }
 
 .quickbox h3 {
