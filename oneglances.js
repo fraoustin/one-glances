@@ -210,7 +210,7 @@ function processRequestCpuChart(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         var datas = JSON.parse(e.target.responseText);
         var data = [];
-        for (var i = 0; i < datas.system.length; ++i) {data.add(datas.system[i])} 
+        for (var i = 0; i < datas.system.length; ++i) {data.push(datas.system[i])} 
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
             type: 'line',
