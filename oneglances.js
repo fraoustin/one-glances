@@ -210,7 +210,7 @@ function processRequestCpuChart(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         var datas = JSON.parse(e.target.responseText);
         var data = [];
-        for (var i = 0; i < datas.system.length; ++i) {data.push(datas.system[i])} 
+        for (var i = 0; i < datas.system.length; ++i) {data.push(datas.system[i][1])} 
         console.log(data)
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
@@ -220,6 +220,19 @@ function processRequestCpuChart(e) {
                     labl : 'system',
                     data : data
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                            stepSize: 50
+                        }
+                    }]
+                },                
+            responsive: true,
+            maintainAspectRatio: false
             }
         });
     };
