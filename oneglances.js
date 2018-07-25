@@ -197,6 +197,7 @@ function viewCpu() {
         byCpu.appendChild(htmlToElement(
                             templateCpu.replace("specId",i)
                                 .replace("specPercent",all.percpu[i].total)
+                                .replace("specId",i)
                         ));
         updateColorElt(document.getElementById("cpu"+i), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.percpu[i].total);
     }
