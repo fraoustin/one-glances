@@ -211,10 +211,16 @@ function processRequestCpuChart(e) {
         var datas = JSON.parse(e.target.responseText);
         var data = [];
         for (var i = 0; i < datas.system.length; ++i) {data.push(datas.system[i])} 
+        console.log(data)
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
             type: 'line',
-            data: data
+            data: {
+                datasets:[{
+                    labl : 'system',
+                    data : data
+                }]
+            }
         });
     };
 }
