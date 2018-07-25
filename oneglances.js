@@ -3,8 +3,28 @@ console.log("run oneglances.js");
 var limit = null;
 var all =null;
 var circles = [];
-var colorCircle = ['green', 'blue', 'orange', 'red'];
+var colorCircle = ['rgb(76,175,80)', 'rgb(68,138,255)', 'rgb(255,152,0)', 'rgb(255,64,129)']; //['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
+
+function checkPanel(panel, elt) {
+    if (elt) {
+        try {
+            var shortcut = document.getElementById("shortcut-"+ panel);
+            shortcut.classList.remove('nodisplay')
+        } catch (error) {}
+        return true;
+    } else {
+        try {
+            var shortcut = document.getElementById("shortcut-"+ panel);
+            shortcut.classList.add('nodisplay')
+        } catch (error) {}
+        try {
+            var pan = document.getElementById(panel);
+            pan.classList.add('nodisplay')
+        } catch (error) {}
+        return false;
+    }
+}
 
 function defaultJson(parent, son, def) {
     try {
@@ -84,19 +104,19 @@ function processRequestAll(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         all = JSON.parse(e.target.responseText);
         viewQuickLook();
-        viewSystem();
-        viewCpu();
-        viewMemory();
-        viewSwap();
-        viewLoad();
-        viewAlert();
-        viewNetwork();
-        viewPort();
-        viewDiskIO();
-        viewFileSYS();
-        viewSensor();
-        viewThread();
-        viewDocker();
+        if(checkPanel("system", all.system)) {viewSystem()};
+        if(checkPanel("cpu", all.cpu)) {viewCpu()};
+        if(checkPanel("memory", all.mem)) {viewMemory()};
+        if(checkPanel("swap", all.memswap)) {viewSwap()};
+        if(checkPanel("load", all.load)) {viewLoad()};
+        if(checkPanel("alert", all.alert)) {viewAlert()};
+        if(checkPanel("network", all.network)) {viewNetwork()};
+        if(checkPanel("port", all.ports)) {viewPort()};
+        if(checkPanel("diskio", all.diskio)) {viewDiskIO()};
+        if(checkPanel("filesys", all.fs)) {viewFileSYS()};
+        if(checkPanel("sensors", all.sensors)) {viewSensor()};
+        if(checkPanel("processlist", all.system)) {viewThread()};
+        if(checkPanel("docker", all.system)) {viewDocker()};
     };
 }
 
@@ -168,7 +188,7 @@ function viewCpu() {
     document.getElementById("cpu-inter").innerText = all.cpu.interrupts;
     document.getElementById("cpu-sw_int").innerText = all.cpu.soft_interrupts;
 
-    var templateCpu=`<tr><td>Cpu specId</td><td><span class="space-left">specPercent%</span></td></tr>`
+    var templateCpu=`<tr><td>Cpu specId</td><td><span id="cpuspecId" class="space-left">specPercent%</span></td></tr>`
     var byCpu = document.getElementById("bycpu");
     while (byCpu.firstChild) {
         byCpu.removeChild(byCpu.firstChild);
@@ -178,8 +198,22 @@ function viewCpu() {
                             templateCpu.replace("specId",i)
                                 .replace("specPercent",all.percpu[i].total)
                         ));
+        updateColorElt(document.getElementById("cpu"+i), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.percpu[i].total);
     }
+    
+    callGlances("cpu/history", processRequestCpuChart);
 
+}
+
+function processRequestCpuChart(e) {
+    if (e.target.readyState == 4 && e.target.status == 200) {
+        data = JSON.parse(e.target.responseText);
+        var ctx = document.getElementById("chartCpu");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: [data.system,data.user]
+        });
+    };
 }
 
 function viewLoad() {
@@ -228,7 +262,7 @@ function viewNetwork() {
 }
 
 function viewPort() {
-    var templatePort=`<tr><td id="portspecId" class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
+    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
     var port = document.getElementById("port").getElementsByTagName("tbody")[0];
     while (port.firstChild) {
         port.removeChild(port.firstChild);
@@ -238,10 +272,12 @@ function viewPort() {
             templatePort.replace("specName",all.ports[i].description)
                 .replace("specStatus",all.ports[i].status)
                 .replace("specElapsed",defaultJson(all.ports[i], "elapsed", ""))
-                .replace("specid",i)
+                .replace("specId",i)
             ));
         if (all.ports[i].status == false) {
-            document.getElementById("port"+i).classList.add("critical")
+            document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("critical")
+        } else {
+            document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("default")
         }
     }
 }
@@ -325,28 +361,24 @@ function viewThread() {
 }
 
 function viewDocker() {
-    if (all.docker) {
-        document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
+    document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-        var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
-        var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
-        while (docker.firstChild) {
-            docker.removeChild(docker.firstChild);
-        }
-        for (var i = 0; i < all.docker.containers.length; ++i) {
-            docker.appendChild(htmlToElement(
-                templateDocker.replace("specName",all.docker.containers[i].name)
-                    .replace("specStatus",all.docker.containers[i].Status)
-                    .replace("specCpu",(all.docker.containers[i].cpu_percent).toFixed(1))
-                    .replace("specMem",FileConvertSize(all.docker.containers[i].memory_usage))
-                    .replace("specWrite",FileConvertSize(all.docker.containers[i].io_w))
-                    .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
-                    .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
-                    .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
-                ));
-        }
-
-        
+    var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
+    var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
+    while (docker.firstChild) {
+        docker.removeChild(docker.firstChild);
+    }
+    for (var i = 0; i < all.docker.containers.length; ++i) {
+        docker.appendChild(htmlToElement(
+            templateDocker.replace("specName",all.docker.containers[i].name)
+                .replace("specStatus",all.docker.containers[i].Status)
+                .replace("specCpu",(all.docker.containers[i].cpu_percent).toFixed(1))
+                .replace("specMem",FileConvertSize(all.docker.containers[i].memory_usage))
+                .replace("specWrite",FileConvertSize(all.docker.containers[i].io_w))
+                .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
+                .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
+                .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
+            ));
     }
 }
 

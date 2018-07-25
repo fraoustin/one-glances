@@ -4,6 +4,11 @@ body {
 
 }
 
+
+.nodisplay {
+    display: none;
+}
+
 .noborder {
     border: none;
 }
@@ -60,22 +65,22 @@ body {
 
 
 .default, .default > circles-text {
-    color: green;
+    color: rgb(76,175,80);
     font-weight: bold;
 }
 
 .careful, .careful > circles-text  {
-    color: blue;
+    color: rgb(68,138,255);
     font-weight: bold;
 }
 
 .warning, .warning > circles-text  {
-    color: orange;
+    color: rgb(255,152,0);
     font-weight: bold;
 }
 
 .critical, .critical > circles-text  {
-    color: red;
+    color: rgb(255,64,129);
     font-weight: bold;
 }
 
@@ -84,19 +89,19 @@ body {
 }
 
 .quickbox.defaultt {
-    border-left-color: green;
+    border-left-color: rgb(76,175,80);
 }
 
 .quickbox.careful  {
-    border-left-color: blue;
+    border-left-color: rgb(68,138,255);
 }
 
 .quickbox.warning  {
-    border-left-color: orange;
+    border-left-color: rgb(255,152,0);
 }
 
 .quickbox.critical  {
-    border-left-color: red;
+    border-left-color: rgb(255,64,129);
 }
 
 .quickbox h3 {
