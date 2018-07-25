@@ -214,7 +214,7 @@ function processRequestCpuChart(e) {
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
             type: 'line',
-            data: [data.system,data.user]
+            data: data
         });
     };
 }
