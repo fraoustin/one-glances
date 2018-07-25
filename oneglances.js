@@ -211,15 +211,18 @@ function processRequestCpuChart(e) {
         var datas = JSON.parse(e.target.responseText);
         var data = [];
         var length = 50;
-        if (datas.system.length < 50) { length = datas.system.length }
-        for (var i = 0; i < length; ++i) {data.push(datas.system[datas.system.length-i][1])} 
+        if (datas.system.length < 51) { length = datas.system.length }
+        for (var i = length; i >= 0 ; --i) {
+            console.log(datas.system.length - i)
+            data.push(datas.system[datas.system.length - i][1])
+        } 
         console.log(data)
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
             type: 'line',
             data: {
                 datasets:[{
-                    labl : 'system',
+                    label : 'system',
                     data : data
                 }]
             },
