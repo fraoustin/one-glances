@@ -209,37 +209,39 @@ function viewCpu() {
 function processRequestCpuChart(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         var datas = JSON.parse(e.target.responseText);
-        var datasystem = [];
-        var datauser = [];
-        var datatotal = [];
-        var datalabels = [];
-        var length = 50;
-        if (datas.system.length < 50) { length = datas.system.length }
-        for (var i = length; i >= 1 ; --i) {
-            datasystem.push(datas.system[datas.system.length - i][1])
-            datauser.push(datas.user[datas.system.length - i][1])
-            datatotal.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
+        var data = {"system" : [], "user" : [], "total" : [], "labels" : []};
+        for (var i = datas.system.length; i >= 1 ; --i) {
+            data.labels.push(datas.system[datas.system.length - i][0])
+            data.system.push(datas.system[datas.system.length - i][1])
+            data.user.push(datas.user[datas.system.length - i][1])
+            data.total.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
         } 
-        console.log(data)
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
             type: 'line',
-            labels: datalabels,
             data: {
+                labels: data.labels,
                 datasets:[{
                     label : 'system',
-                    data : datasystem
+                    data : data.system,
+                    pointRadius : 0,
+                    borderColor : rgb(76,175,80)
+                    
                 },{
                     label : 'user',
-                    data : datasystem
+                    data : data.user,
+                    pointRadius : 0,
+                    borderColor : rgb(68,138,255)
                 },{
                     label : 'total',
-                    data : datasystem
+                    data : data.total,
+                    pointRadius : 0,
+                    borderColor : rgb(255,64,129)
                 }]
             },
             options: {
-                legends: {
-                    position: 'left'
+                legend: {
+                    position: 'right'
                 },
                 scales: {
                     yAxes: [{
@@ -251,9 +253,7 @@ function processRequestCpuChart(e) {
                     }],
                     xAxes: [
                         {
-                          scaleLabel: {
                             display: false
-                          }
                         }
                       ],
                 },                
