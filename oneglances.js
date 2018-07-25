@@ -209,32 +209,53 @@ function viewCpu() {
 function processRequestCpuChart(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         var datas = JSON.parse(e.target.responseText);
-        var data = [];
+        var datasystem = [];
+        var datauser = [];
+        var datatotal = [];
+        var datalabels = [];
         var length = 50;
         if (datas.system.length < 50) { length = datas.system.length }
         for (var i = length; i >= 1 ; --i) {
-            console.log(datas.system.length - i)
-            data.push(datas.system[datas.system.length - i][1])
+            datasystem.push(datas.system[datas.system.length - i][1])
+            datauser.push(datas.user[datas.system.length - i][1])
+            datatotal.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
         } 
         console.log(data)
         var ctx = document.getElementById("chartCpu");
         var myLineChart = new Chart(ctx, {
             type: 'line',
+            labels: datalabels,
             data: {
                 datasets:[{
                     label : 'system',
-                    data : data
+                    data : datasystem
+                },{
+                    label : 'user',
+                    data : datasystem
+                },{
+                    label : 'total',
+                    data : datasystem
                 }]
             },
             options: {
+                legends: {
+                    position: 'left'
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
                             min: 0,
-                            max: 20,
-                            stepSize: 10
+                            max: 100,
+                            stepSize: 50
                         }
-                    }]
+                    }],
+                    xAxes: [
+                        {
+                          scaleLabel: {
+                            display: false
+                          }
+                        }
+                      ],
                 },                
             responsive: true,
             maintainAspectRatio: false
