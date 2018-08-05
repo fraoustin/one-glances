@@ -176,7 +176,7 @@ function processRequestMemoryChart(e) {
         var datas = JSON.parse(e.target.responseText);
         var data = {"values" : [],  "labels" : []};
         for (var i = datas.percent.length; i >= 1 ; --i) {
-            data.labels.push(datas.percent[datas.percent.percent - i][0])
+            data.labels.push(datas.percent[datas.percent.length - i][0])
             data.values.push(datas.percent[datas.percent.length - i][1])
         } 
         var ctx = document.getElementById("chartMemory");
@@ -238,7 +238,7 @@ function processRequestSwapChart(e) {
         var datas = JSON.parse(e.target.responseText);
         var data = {"values" : [],  "labels" : []};
         for (var i = datas.percent.length; i >= 1 ; --i) {
-            data.labels.push(datas.percent[datas.percent.percent - i][0])
+            data.labels.push(datas.percent[datas.percent.length - i][0])
             data.values.push(datas.percent[datas.percent.length - i][1])
         } 
         var ctx = document.getElementById("chartSwap");
