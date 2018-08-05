@@ -11,7 +11,7 @@ function clickCloseDialog() {
     dialog.close();
 }
 
-function OpenChartTempory(data, label, yAxes) {
+function OpenChartTemporary(data, label, yAxes) {
     // var data = {"values" : [],  "labels" : []};
     // var label = "label";
     // var yAxes = [];
@@ -27,7 +27,7 @@ function OpenChartTempory(data, label, yAxes) {
     var chart = document.createElement('canvas');
     chart.setAttribute("id","chartTemporary");
     //manage width of dialog in css and here
-    chart.setAttribute("width",screen.width * 0.8);
+    chart.setAttribute("width",screen.width * 0.9);
     chart.setAttribute("height","200px");
     document.getElementById("dialog-content").appendChild(chart);
 
@@ -49,7 +49,7 @@ function OpenChartTempory(data, label, yAxes) {
                 duration: 0
             },
             legend: {
-                position: 'right'
+                position: 'bottom'
             },
             scales: {
                 yAxes: yAxes,
@@ -376,6 +376,7 @@ function viewCpu() {
                         ));
         updateColorElt(document.getElementById("cpu"+i), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.percpu[i].total);
         
+        // chart by cpu by dialog
         document.getElementById("cpu"+i).addEventListener('click', function(event) {
             var targetElement = event.target || event.srcElement;
             var idCpu = targetElement.id.substring(3,targetElement.id.length);
@@ -387,11 +388,11 @@ function viewCpu() {
                         data.labels.push(datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][0])
                         data.values.push(datas[idCpu+'_user'][datas[idCpu+'_system'].length - k][1]+datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][1])
                     } 
-                    OpenChartTempory(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+                    OpenChartTemporary(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
                 }
 
             });
-          });
+        });
     }
     
     callGlances("cpu/history", processRequestCpuChart);
@@ -666,7 +667,7 @@ function viewThread() {
 function viewDocker() {
     document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
+    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td id="dockerspecIdCpu">specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
     var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
     while (docker.firstChild) {
         docker.removeChild(docker.firstChild);
@@ -684,9 +685,29 @@ function viewDocker() {
                 .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
                 .replace("specId",i)
                 .replace("specId",i)
+                .replace("specId",i)
             ));
             updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[1], 'running' , all.docker.containers[i].Status);
             updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[2], 'running' , all.docker.containers[i].Status);
+
+            
+        // chart by cpu by docker
+        document.getElementById("docker"+i+"Cpu").addEventListener('click', function(event) {
+            var targetElement = event.target || event.srcElement;
+            var idCpu = targetElement.id.substring(0,targetElement.id.length-12);
+            callGlances("docker/history", function processRequestPerCpuChart(e) {
+                if (e.target.readyState == 4 && e.target.status == 200) {
+                    var datas = JSON.parse(e.target.responseText);
+                    var data = {"values" : [], "labels" : []};
+                    for (var k = datas[idCpu+'_cpu_percent'].length; k >= 1 ; --k) {
+                        data.labels.push(datas[idCpu+'_cpu_percent'][datas[idCpu+'_cpu_percent'].length - k][0])
+                        data.values.push(datas[idCpu+'_cpu_percent'][datas[idCpu+'_cpu_percent'].length - k][1])
+                    } 
+                    OpenChartTemporary(data, idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+                }
+
+            });
+        });
     }
 }
 
