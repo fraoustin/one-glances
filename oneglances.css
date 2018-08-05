@@ -4,6 +4,9 @@ body {
 
 }
 
+.mdl-dialog {
+    width: 95%;
+}
 
 .nodisplay {
     display: none;

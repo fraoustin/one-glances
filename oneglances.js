@@ -26,7 +26,8 @@ function OpenChartTempory(data, label, yAxes) {
     }
     var chart = document.createElement('canvas');
     chart.setAttribute("id","chartTemporary");
-    chart.setAttribute("width","90%");
+    //manage width of dialog in css and here
+    chart.setAttribute("width",screen.width * 0.8);
     chart.setAttribute("height","200px");
     document.getElementById("dialog-content").appendChild(chart);
 
@@ -58,7 +59,7 @@ function OpenChartTempory(data, label, yAxes) {
                     }
                     ],
             },                
-        responsive: true,
+        responsive: false,
         maintainAspectRatio: false
         }
     });
