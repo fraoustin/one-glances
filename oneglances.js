@@ -3,8 +3,103 @@ console.log("run oneglances.js");
 var limit = null;
 var all =null;
 var circles = [];
-var colorCircle = ['green', 'blue', 'orange', 'red'];
+var colorCircle = ['rgb(76,175,80)', 'rgb(68,138,255)', 'rgb(255,152,0)', 'rgb(255,64,129)']; //['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
+
+
+function waitIhmStart() {
+    var dialog = document.getElementById("waitihm")
+    if (!dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+    };
+    dialog.showModal();
+}
+function waitIhmStop() {
+    var dialog = document.getElementById("waitihm")
+    dialog.close();
+}
+
+
+function clickCloseDialog() {
+    var dialog = document.querySelector('dialog');
+    dialog.close();
+}
+
+function OpenChartTemporary(data, label, yAxes) {
+    // var data = {"values" : [],  "labels" : []};
+    // var label = "label";
+    // var yAxes = [];
+    var dialog = document.querySelector('dialog');
+    var showDialogButton = document.querySelector('#show-dialog');
+    if (!dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+    };
+
+    while (document.getElementById("dialog-content").firstChild) {
+        document.getElementById("dialog-content").removeChild(document.getElementById("dialog-content").firstChild);
+    }
+    var chart = document.createElement('canvas');
+    chart.setAttribute("id","chartTemporary");
+    //manage width of dialog in css and here
+    chart.setAttribute("width",screen.width * 0.9);
+    chart.setAttribute("height","200px");
+    document.getElementById("dialog-content").appendChild(chart);
+
+    var ctx = document.getElementById("chartTemporary");
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets:[{
+                label : label,
+                data : data.values,
+                pointRadius : 0,
+                borderColor : 'rgb(68,138,255)'
+                
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            legend: {
+                position: 'bottom'
+            },
+            scales: {
+                yAxes: yAxes,
+                xAxes: [
+                    {
+                        display: false
+                    }
+                    ],
+            },                
+        responsive: false,
+        maintainAspectRatio: false
+        }
+    });
+    
+    dialog.showModal();
+}
+
+function checkPanel(panel, elt) {
+    if (elt) {
+        try {
+            var shortcut = document.getElementById("shortcut-"+ panel);
+            shortcut.classList.remove('nodisplay')
+        } catch (error) {}
+        return true;
+    } else {
+        try {
+            var shortcut = document.getElementById("shortcut-"+ panel);
+            shortcut.classList.add('nodisplay')
+        } catch (error) {}
+        try {
+            var pan = document.getElementById(panel);
+            pan.classList.add('nodisplay')
+        } catch (error) {}
+        return false;
+    }
+}
 
 function defaultJson(parent, son, def) {
     try {
@@ -20,6 +115,19 @@ function updateColorElt(elt, levels, value) {
     for (var i = 0; i < levels; ++i) {
         if (value >= levels[i]) { color = colorClassName[i+1]}
     };
+    // cleanColor
+    for (var i = 0; i < colorClassName; ++i) {
+        if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
+    };
+    elt.classList.add(color);
+}
+
+function updateColorEltText(elt, level, value) {
+    // level normal
+    color = colorClassName[0];
+    if (level != value) {
+        color = colorClassName[3];        
+    }
     // cleanColor
     for (var i = 0; i < colorClassName; ++i) {
         if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
@@ -57,9 +165,9 @@ function epochToDate(timestamp){
 function FileConvertSize(aSize){
     try {
         aSize = Math.abs(parseInt(aSize, 10));
-        var def = [[1, 'octets'], [1024, 'ko'], [1024*1024, 'Mo'], [1024*1024*1024, 'Go'], [1024*1024*1024*1024, 'To']];
+        var def = [[1, 'o', 0], [1024, 'ko', 2], [1024*1024, 'Mo', 2], [1024*1024*1024, 'Go', 2], [1024*1024*1024*1024, 'To', 2]];
         for(var i=0; i<def.length; i++){
-            if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(2)+' '+def[i-1][1];
+            if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(def[i-1][2])+' '+def[i-1][1];
         }        
     } catch (error) {
         return aSize;
@@ -84,19 +192,19 @@ function processRequestAll(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         all = JSON.parse(e.target.responseText);
         viewQuickLook();
-        viewSystem();
-        viewCpu();
-        viewMemory();
-        viewSwap();
-        viewLoad();
-        viewAlert();
-        viewNetwork();
-        viewPort();
-        viewDiskIO();
-        viewFileSYS();
-        viewSensor();
-        viewThread();
-        viewDocker();
+        if(checkPanel("system", all.system)) {viewSystem()};
+        if(checkPanel("cpu", all.cpu)) {viewCpu()};
+        if(checkPanel("memory", all.mem)) {viewMemory()};
+        if(checkPanel("swap", all.memswap)) {viewSwap()};
+        if(checkPanel("load", all.load)) {viewLoad()};
+        if(checkPanel("alert", all.alert)) {viewAlert()};
+        if(checkPanel("network", all.network)) {viewNetwork()};
+        if(checkPanel("port", all.ports)) {viewPort()};
+        if(checkPanel("diskio", all.diskio)) {viewDiskIO()};
+        if(checkPanel("filesys", all.fs)) {viewFileSYS()};
+        if(checkPanel("sensors", all.sensors)) {viewSensor()};
+        if(checkPanel("processlist", all.system)) {viewThread()};
+        if(checkPanel("docker", all.system)) {viewDocker()};
     };
 }
 
@@ -135,6 +243,27 @@ function viewMemory() {
     document.getElementById("memory-shared").innerText = FileConvertSize(all.mem.shared);
     document.getElementById("memory-total").innerText = FileConvertSize(all.mem.total);
     document.getElementById("memory-buffers").innerText = FileConvertSize(all.mem.buffers);
+    
+    // chart memory
+    var graphMemory = function(event) {
+        waitIhmStart();
+        callGlances("mem/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.percent.length; i >= 1 ; --i) {
+                    data.labels.push(datas.percent[datas.percent.length - i][0])
+                    data.values.push(datas.percent[datas.percent.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Memory", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("circles-memory-mem").parentElement.addEventListener('click', graphMemory);
+    document.getElementById("circles-quicklook-mem").addEventListener('click', graphMemory);
+
 }
 
 function viewSwap() {
@@ -146,6 +275,27 @@ function viewSwap() {
     document.getElementById("swap-total").innerText = FileConvertSize(all.memswap.total);
     document.getElementById("swap-free").innerText = FileConvertSize(all.memswap.free);
     document.getElementById("swap-sin").innerText = FileConvertSize(all.memswap.sin);
+    
+    // chart swap
+    var graphSwap = function(event) {
+        waitIhmStart();
+        callGlances("swap/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.percent.length; i >= 1 ; --i) {
+                    data.labels.push(datas.percent[datas.percent.length - i][0])
+                    data.values.push(datas.percent[datas.percent.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Swap", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("circles-swap-swap").addEventListener('click', graphSwap);
+    document.getElementById("circles-quicklook-swap").addEventListener('click', graphSwap);
+
 }
 
 function viewCpu() {
@@ -168,7 +318,67 @@ function viewCpu() {
     document.getElementById("cpu-inter").innerText = all.cpu.interrupts;
     document.getElementById("cpu-sw_int").innerText = all.cpu.soft_interrupts;
 
-    var templateCpu=`<tr><td>Cpu specId</td><td><span class="space-left">specPercent%</span></td></tr>`
+    
+    // chart cpu
+    var graphCpu = function(event) {
+        waitIhmStart();
+        callGlances("cpu/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.system.length; i >= 1 ; --i) {
+                    data.labels.push(datas.system[datas.system.length - i][0])
+                    data.values.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Cpu", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("circles-cpu-cpu").addEventListener('click', graphCpu);
+    document.getElementById("circles-quicklook-cpu").addEventListener('click', graphCpu);
+    
+    // chart cpu user
+    var graphCpuUser = function(event) {
+        waitIhmStart();
+        callGlances("cpu/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.system.length; i >= 1 ; --i) {
+                    data.labels.push(datas.system[datas.system.length - i][0])
+                    data.values.push(datas.user[datas.system.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Cpu User", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("cpu-user").addEventListener('click', graphCpuUser);
+
+    // chart cpu system
+    var graphCpuSystem = function(event) {
+        waitIhmStart();
+        callGlances("cpu/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.system.length; i >= 1 ; --i) {
+                    data.labels.push(datas.system[datas.system.length - i][0])
+                    data.values.push(datas.system[datas.system.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Cpu System", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("cpu-system").addEventListener('click', graphCpuSystem);
+
+    // cpu by cpu
+    var templateCpu=`<tr><td>Cpu specId</td><td><span id="cpuspecId" class="space-left">specPercent%</span></td></tr>`
     var byCpu = document.getElementById("bycpu");
     while (byCpu.firstChild) {
         byCpu.removeChild(byCpu.firstChild);
@@ -177,18 +387,99 @@ function viewCpu() {
         byCpu.appendChild(htmlToElement(
                             templateCpu.replace("specId",i)
                                 .replace("specPercent",all.percpu[i].total)
+                                .replace("specId",i)
                         ));
+        updateColorElt(document.getElementById("cpu"+i), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.percpu[i].total);
+        
+        // chart by cpu by dialog
+        document.getElementById("cpu"+i).addEventListener('click', function(event) {
+            waitIhmStart();
+            var targetElement = event.target || event.srcElement;
+            var idCpu = targetElement.id.substring(3,targetElement.id.length);
+            callGlances("percpu/history", function processRequestPerCpuChart(e) {
+                if (e.target.readyState == 4 && e.target.status == 200) {
+                    var datas = JSON.parse(e.target.responseText);
+                    var data = {"values" : [], "labels" : []};
+                    for (var k = datas[idCpu+'_system'].length; k >= 1 ; --k) {
+                        data.labels.push(datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][0])
+                        data.values.push(datas[idCpu+'_user'][datas[idCpu+'_system'].length - k][1]+datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][1])
+                    } 
+                    waitIhmStop();
+                    OpenChartTemporary(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+                }
+
+            });
+        });
     }
 
 }
+
 
 function viewLoad() {
     document.getElementById("load-cpucore").innerText = all.load.cpucore;
     updateColorElt(document.getElementById("load-cpucore"), [limit.load.load_careful, limit.load.load_warning, limit.load.load_critical] , all.load.cpucore);
     document.getElementById("load-min1").innerText = all.load.min1;
     document.getElementById("load-min5").innerText = all.load.min5;
-    document.getElementById("load-min15").innerText = all.load.min15;
+    document.getElementById("load-min15").innerText = all.load.min15;   
+    
+    // chart min1
+    var graphMin1 = function(event) {
+        waitIhmStart();
+        callGlances("load/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.min1.length; i >= 1 ; --i) {
+                    data.labels.push(datas.min1[datas.min1.length - i][0])
+                    data.values.push(datas.min1[datas.min1.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "load min1", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("load-min1").addEventListener('click', graphMin1);
+
+    // chart min5
+    var graphMin5 = function(event) {
+        waitIhmStart();
+        callGlances("load/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.min5.length; i >= 1 ; --i) {
+                    data.labels.push(datas.min5[datas.min5.length - i][0])
+                    data.values.push(datas.min5[datas.min5.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "load min5", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("load-min5").addEventListener('click', graphMin5);
+
+    // chart min15
+    var graphMin15 = function(event) {
+        waitIhmStart();
+        callGlances("load/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.min15.length; i >= 1 ; --i) {
+                    data.labels.push(datas.min15[datas.min15.length - i][0])
+                    data.values.push(datas.min15[datas.min15.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "load min15", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("load-min15").addEventListener('click', graphMin15);
 }
+
 
 function viewAlert() {
     var templateAlert=`<tr><td>spec0</td><td>spec1</td><td>spec2</td><td>spec3</td><td>spec4</td></tr>`
@@ -228,7 +519,7 @@ function viewNetwork() {
 }
 
 function viewPort() {
-    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
+    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td>specElapsed</td></tr>`
     var port = document.getElementById("port").getElementsByTagName("tbody")[0];
     while (port.firstChild) {
         port.removeChild(port.firstChild);
@@ -236,14 +527,17 @@ function viewPort() {
     for (var i = 0; i < all.ports.length; ++i) {
         port.appendChild(htmlToElement(
             templatePort.replace("specName",all.ports[i].description)
+                .replace("specName",all.ports[i].description)
                 .replace("specStatus",all.ports[i].status)
                 .replace("specElapsed",defaultJson(all.ports[i], "elapsed", ""))
-                .replace("specid",i)
+                .replace("specId",i)
             ));
         if (all.ports[i].status == false) {
             document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("critical")
+            document.getElementById("port"+i).getElementsByTagName("td")[2].classList.add("critical")
         } else {
             document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("default")
+            document.getElementById("port"+i).getElementsByTagName("td")[2].classList.add("default")
         }
     }
 }
@@ -327,28 +621,51 @@ function viewThread() {
 }
 
 function viewDocker() {
-    if (all.docker) {
-        document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
+    document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-        var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
-        var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
-        while (docker.firstChild) {
-            docker.removeChild(docker.firstChild);
-        }
-        for (var i = 0; i < all.docker.containers.length; ++i) {
-            docker.appendChild(htmlToElement(
-                templateDocker.replace("specName",all.docker.containers[i].name)
-                    .replace("specStatus",all.docker.containers[i].Status)
-                    .replace("specCpu",(all.docker.containers[i].cpu_percent).toFixed(1))
-                    .replace("specMem",FileConvertSize(all.docker.containers[i].memory_usage))
-                    .replace("specWrite",FileConvertSize(all.docker.containers[i].io_w))
-                    .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
-                    .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
-                    .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
-                ));
-        }
+    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td id="CpuspecName">specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
+    var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
+    while (docker.firstChild) {
+        docker.removeChild(docker.firstChild);
+    }
+    for (var i = 0; i < all.docker.containers.length; ++i) {
+        docker.appendChild(htmlToElement(
+            templateDocker.replace("specName",all.docker.containers[i].name)
+                .replace("specName",all.docker.containers[i].name)
+                .replace("specStatus",all.docker.containers[i].Status)
+                .replace("specCpu",(all.docker.containers[i].cpu_percent).toFixed(1))
+                .replace("specMem",FileConvertSize(all.docker.containers[i].memory_usage))
+                .replace("specWrite",FileConvertSize(all.docker.containers[i].io_w))
+                .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
+                .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
+                .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
+                .replace("specId",i)
+                .replace("specId",i)
+                .replace("specName",all.docker.containers[i].name)
+            ));
+            updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[1], 'running' , all.docker.containers[i].Status);
+            updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[2], 'running' , all.docker.containers[i].Status);
 
-        
+            
+        // chart by cpu by docker
+        document.getElementById("Cpu"+all.docker.containers[i].name).addEventListener('click', function(event) {
+            waitIhmStart();
+            var targetElement = event.target || event.srcElement;
+            var idCpu = targetElement.id.substring(3,targetElement.id.length);
+            callGlances("docker/history", function processRequestPerCpuChart(e) {
+                if (e.target.readyState == 4 && e.target.status == 200) {
+                    var datas = JSON.parse(e.target.responseText);
+                    var data = {"values" : [], "labels" : []};
+                    for (var k = datas[idCpu+'_cpu_percent'].length; k >= 1 ; --k) {
+                        data.labels.push(datas[idCpu+'_cpu_percent'][datas[idCpu+'_cpu_percent'].length - k][0])
+                        data.values.push(datas[idCpu+'_cpu_percent'][datas[idCpu+'_cpu_percent'].length - k][1])
+                    } 
+                    waitIhmStop();
+                    OpenChartTemporary(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+                }
+
+            });
+        });
     }
 }
 

@@ -4,6 +4,14 @@ body {
 
 }
 
+.mdl-dialog {
+    width: 92%;
+}
+
+.nodisplay {
+    display: none;
+}
+
 .noborder {
     border: none;
 }
@@ -60,22 +68,22 @@ body {
 
 
 .default, .default > circles-text {
-    color: green;
+    color: rgb(76,175,80);
     font-weight: bold;
 }
 
 .careful, .careful > circles-text  {
-    color: blue;
+    color: rgb(68,138,255);
     font-weight: bold;
 }
 
 .warning, .warning > circles-text  {
-    color: orange;
+    color: rgb(255,152,0);
     font-weight: bold;
 }
 
 .critical, .critical > circles-text  {
-    color: red;
+    color: rgb(255,64,129);
     font-weight: bold;
 }
 
@@ -83,20 +91,20 @@ body {
     border-left-color: grey;
 }
 
-.quickbox.defaultt {
-    border-left-color: green;
+.quickbox.default {
+    border-left-color: rgb(76,175,80);
 }
 
 .quickbox.careful  {
-    border-left-color: blue;
+    border-left-color: rgb(68,138,255);
 }
 
 .quickbox.warning  {
-    border-left-color: orange;
+    border-left-color: rgb(255,152,0);
 }
 
 .quickbox.critical  {
-    border-left-color: red;
+    border-left-color: rgb(255,64,129);
 }
 
 .quickbox h3 {
@@ -126,20 +134,32 @@ body {
     margin-right: 10px;
 }
 
-@media (max-width: 500px) {
+.only-mobile {
+    display: none;
+}
+
+#waitihm > #dialog-content {
+    text-align: center;
+}
+#waitihm > #dialog-content > .mdl-spinner {
+    width: 56px;
+    height: 56px;
+}
+ 
+
+@media (max-width: 700px) {
     .no-mobile {
         display: none;
     }
-
+    .only-mobile {
+        display: table-cell;
+    }
     .quickbox, .box {
         width: 100%; 
     }
 }
 
-@media (min-width: 500px) and (max-width: 900px) {
-    .no-mobile {
-        display: none;
-    }
+@media (min-width: 700px) and (max-width: 900px) {
 
     .quickbox, .box {
         width: 40%; 

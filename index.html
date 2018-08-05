@@ -26,42 +26,54 @@
     <link rel="stylesheet" href="./roboto.css">
 
 
-    <script src="./mdl/material.js"></script>
-    <link rel="stylesheet" href="./mdl/material.css">
+    <script src="./mdl/material.min.js"></script>
     <link rel="stylesheet" href="./mdl/material.min.css">
     <link rel="stylesheet" href="./material-icons.css">
     <link rel="stylesheet" type="text/css" href="./dialog-polyfill/dialog-polyfill.css" />
     <script src="./circles/circles.min.js"></script>
+    <script src="./chartjs/Chart.min.js"></script>
     <link rel="stylesheet" href="./oneglances.css">
 </head>
 <body>
       
 <!-- Always shows a header, even in smaller screens. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <dialog class="mdl-dialog">
+        <div class="mdl-dialog__content" id="dialog-content">          
+        </div>
+        <div class="mdl-dialog__actions">
+            <button type="button" class="mdl-button mdl-button--primary" onclick="clickCloseDialog()"> <i class="material-icons">close</i>Close</button>
+        </div>
+    </dialog>
+    <dialog class="mdl-dialog" id="waitihm">
+        <div class="mdl-dialog__content" id="dialog-content">   
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>      
+        </div>
+    </dialog>
     <main class="mdl-layout__content">
         <ul class="mdl-list" id="menu">
             <li class="mdl-list__item">
                 <a href="#content"><div class="material-icons mdl-badge mdl-badge--overlap">remove_red_eye</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-cpu">
                 <a href="#cpu"><div class="material-icons mdl-badge mdl-badge--overlap">directions_run</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-memory">
                 <a href="#memory"><div class="material-icons mdl-badge mdl-badge--overlap">memory</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-alert">
                 <a href="#alert"><div class="material-icons mdl-badge mdl-badge--overlap">alarm</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-docker">
                 <a href="#docker"><div class="material-icons mdl-badge mdl-badge--overlap">dock</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-network">
                 <a href="#network"><div class="material-icons mdl-badge mdl-badge--overlap">wifi_tethering</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-diskio">
                 <a href="#diskio"><div class="material-icons mdl-badge mdl-badge--overlap">storage</div></a>
             </li>
-            <li class="mdl-list__item">
+            <li class="mdl-list__item" id="shortcut-thread">
                 <a href="#thread"><div class="material-icons mdl-badge mdl-badge--overlap">reorder</div></a>
             </li>
         </ul>
@@ -71,10 +83,10 @@
                     <h2 class="mdl-card__title-text" id="quicklook-hostname"></h2>
                 </div>
                 <div class="mdl-card__supporting-text flow">
-                <div id="quickbox-cpu" class="quickbox default"><div><div class="circles" id="circles-quicklook-cpu"></div><h3>CPU</h3></div></div>
-                <div id="quickbox-mem" class="quickbox default"><div><div class="circles" id="circles-quicklook-mem"></div><h3>MEM</h3></div></div>
-                <div id="quickbox-swap" class="quickbox default"><div><div class="circles" id="circles-quicklook-swap"></div><h3>SWAP</h3></div></div>
-                <div id="quickbox-procs" class="quickbox grey"><h3 id="quicklook-procs">PROCS</h3></div>
+                    <div id="quickbox-cpu" class="quickbox default"><div><div class="circles" id="circles-quicklook-cpu"></div><h3>CPU</h3></div></div>
+                    <div id="quickbox-mem" class="quickbox default"><div><div class="circles" id="circles-quicklook-mem"></div><h3>MEM</h3></div></div>
+                    <div id="quickbox-swap" class="quickbox default"><div><div class="circles" id="circles-quicklook-swap"></div><h3>SWAP</h3></div></div>
+                    <div id="quickbox-procs" class="quickbox grey"><h3 id="quicklook-procs">PROCS</h3></div>
                 </div>
                 <div class="mdl-card__menu">
                    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="clickRefresh()">
@@ -224,8 +236,9 @@
                     <table class="mdl-data-table center noborder">
                         <thead>
                             <tr>
-                                <th class="mdl-data-table__cell--non-numeric">Name</th>
-                                <th>Status</th>
+                                <th class="mdl-data-table__cell--non-numeric no-mobile">Name</th>
+                                <th class="mdl-data-table__cell--non-numeric only-mobile">Name</th>
+                                <th class="no-mobile">Status</th>
                                 <th>CPU</th>
                                 <th>MEM</th>
                                 <th class="no-mobile">IOR</th>
@@ -265,8 +278,9 @@
                     <table class="mdl-data-table center noborder">
                         <thead>
                             <tr>
-                                <th class="mdl-data-table__cell--non-numeric">Name</th>
-                                <th>Value</th>
+                                <th class="mdl-data-table__cell--non-numeric no-mobile">Name</th>
+                                <th class="mdl-data-table__cell--non-numeric only-mobile">Name</th>
+                                <th class="no-mobile">Value</th>
                                 <th>Elapsed</th>
                             </tr>
                         </thead>
