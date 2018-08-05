@@ -47,6 +47,19 @@ function updateColorElt(elt, levels, value) {
     elt.classList.add(color);
 }
 
+function updateColorEltText(elt, level, value) {
+    // level normal
+    color = colorClassName[0];
+    if (level != value) {
+        color = colorClassName[3];        
+    }
+    // cleanColor
+    for (var i = 0; i < colorClassName; ++i) {
+        if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
+    };
+    elt.classList.add(color);
+}
+
 function updateColorCircle(ci, levels, value) {
     // levels: careful, warning, critical
     color = colorCircle[0];
@@ -411,7 +424,7 @@ function viewThread() {
 function viewDocker() {
     document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-    var templateDocker=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
+    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td>specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
     var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
     while (docker.firstChild) {
         docker.removeChild(docker.firstChild);
@@ -419,6 +432,7 @@ function viewDocker() {
     for (var i = 0; i < all.docker.containers.length; ++i) {
         docker.appendChild(htmlToElement(
             templateDocker.replace("specName",all.docker.containers[i].name)
+                .replace("specName",all.docker.containers[i].name)
                 .replace("specStatus",all.docker.containers[i].Status)
                 .replace("specCpu",(all.docker.containers[i].cpu_percent).toFixed(1))
                 .replace("specMem",FileConvertSize(all.docker.containers[i].memory_usage))
@@ -426,7 +440,11 @@ function viewDocker() {
                 .replace("specRead",FileConvertSize(all.docker.containers[i].io_r))
                 .replace("specRWrite",FileConvertSize(all.docker.containers[i].network_rx))
                 .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
+                .replace("specId",i)
+                .replace("specId",i)
             ));
+            updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[1], 'running' , all.docker.containers[i].Status);
+            updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[2], 'running' , all.docker.containers[i].Status);
     }
 }
 
