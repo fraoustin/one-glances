@@ -275,6 +275,12 @@ function viewMemory() {
     };
     document.getElementById("circles-memory-mem").parentElement.addEventListener('click', graphMemory);
     document.getElementById("circles-quicklook-mem").addEventListener('click', graphMemory);
+    //Badge
+    var cntBadge = document.getElementById('memory').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('memory').getElementsByClassName('warning').length;
+    var cntBadge = document.getElementById('swap').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('swap').getElementsByClassName('warning').length;
+    addBadge('shortcut-memory', cntBadge)
 
 }
 
@@ -307,6 +313,12 @@ function viewSwap() {
     };
     document.getElementById("circles-swap-swap").addEventListener('click', graphSwap);
     document.getElementById("circles-quicklook-swap").addEventListener('click', graphSwap);
+    //Badge
+    var cntBadge = document.getElementById('memory').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('memory').getElementsByClassName('warning').length;
+    var cntBadge = document.getElementById('swap').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('swap').getElementsByClassName('warning').length;
+    addBadge('shortcut-memory', cntBadge)
 
 }
 
@@ -423,6 +435,10 @@ function viewCpu() {
             });
         });
     }
+    //Badge
+    var cntBadge = document.getElementById('cpu').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('cpu').getElementsByClassName('warning').length;
+    addBadge('shortcut-cpu', cntBadge)
 
 }
 
@@ -508,6 +524,10 @@ function viewAlert() {
                             .replace("spec4",all.alert[i][4])
                         ));
     }
+    //Badge
+    var cntBadge = document.getElementById('alert').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('alert').getElementsByClassName('warning').length;
+    addBadge('shortcut-alert', cntBadge)
 }
 
 function viewNetwork() {
@@ -528,6 +548,12 @@ function viewNetwork() {
             updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[2], [limit.network.network_tx_careful, limit.network.network_tx_warning, limit.network.network_tx_critical] , all.network[i].tx);  
         }
     }
+    //Badge
+    var cntBadge = document.getElementById('network').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('network').getElementsByClassName('warning').length;
+    var cntBadge = document.getElementById('port').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('warning').length;
+    addBadge('shortcut-network', cntBadge)
 }
 
 function viewPort() {
@@ -552,6 +578,12 @@ function viewPort() {
             document.getElementById("port"+i).getElementsByTagName("td")[2].classList.add("default")
         }
     }
+    //Badge
+    var cntBadge = document.getElementById('network').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('network').getElementsByClassName('warning').length;
+    var cntBadge = document.getElementById('port').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('warning').length;
+    addBadge('shortcut-network', cntBadge)
 }
 
 function viewDiskIO() {
@@ -586,6 +618,12 @@ function viewFileSYS() {
             ));
         updateColorElt(document.getElementById("fs"+i), [limit.fs.fs_careful, limit.fs.fs_warning, limit.fs.fs_critical] , all.fs[i].percent);
     }
+    //Badge
+    var cntBadge = document.getElementById('filesys').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('filesys').getElementsByClassName('warning').length;
+    var cntBadge = document.getElementById('sensor').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('sensor').getElementsByClassName('warning').length;
+    addBadge('shortcut-diskio', cntBadge)
 }
 
 function viewSensor() {
@@ -602,6 +640,12 @@ function viewSensor() {
             ));
         updateColorElt(document.getElementById("sensor"+i), [limit.sensors[all.sensors[i].type+"_careful"], limit.sensors[all.sensors[i].type+"_warning"], limit.sensors[all.sensors[i].type+"_critical"]] , all.sensors[i].value);
     }
+    //Badge
+    var cntBadge = document.getElementById('filesys').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('filesys').getElementsByClassName('warning').length;
+    var cntBadge = document.getElementById('sensor').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('sensor').getElementsByClassName('warning').length;
+    addBadge('shortcut-diskio', cntBadge)
 }
 
 function viewThread() {
@@ -630,6 +674,10 @@ function viewThread() {
         updateColorElt(document.getElementById("thread"+i).getElementsByTagName('td')[0], [limit.processlist.processlist_cpu_careful, limit.processlist.processlist_cpu_warning, limit.processlist.processlist_cpu_critical] , procs[i].cpu_percent);
         updateColorElt(document.getElementById("thread"+i).getElementsByTagName('td')[1], [limit.processlist.processlist_mem_careful, limit.processlist.processlist_mem_warning, limit.processlist.processlist_mem_critical] , procs[i].memory_percent);
     }
+    //Badge
+    var cntBadge = document.getElementById('thread').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('thread').getElementsByClassName('warning').length;
+    addBadge('shortcut-thread', cntBadge)
 }
 
 function viewDocker() {
@@ -679,6 +727,10 @@ function viewDocker() {
             });
         });
     }
+    //Badge
+    var cntBadge = document.getElementById('docker').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('docker').getElementsByClassName('warning').length;
+    addBadge('shortcut-docker', cntBadge)
 }
 
 
