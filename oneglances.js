@@ -332,7 +332,7 @@ function processRequestSwapChart(e) {
                     }],
                     xAxes: [
                         {
-                            display: false
+                            display: false // not true because modal
                         }
                       ],
                 },                
@@ -385,6 +385,40 @@ function viewCpu() {
     document.getElementById("circles-quicklook-cpu").addEventListener('click', graphCpu);
     document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
     document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
+    
+    // chart cpu user
+    var graphCpuUser = function(event) {
+        callGlances("cpu/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.system.length; i >= 1 ; --i) {
+                    data.labels.push(datas.system[datas.system.length - i][0])
+                    data.values.push(datas.user[datas.system.length - i][1])
+                }
+                OpenChartTemporary(data, "Cpu User", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("cpu-user").addEventListener('click', graphCpuUser);
+
+    // chart cpu system
+    var graphCpuSystem = function(event) {
+        callGlances("cpu/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.system.length; i >= 1 ; --i) {
+                    data.labels.push(datas.system[datas.system.length - i][0])
+                    data.values.push(datas.system[datas.system.length - i][1])
+                }
+                OpenChartTemporary(data, "Cpu System", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("cpu-system").addEventListener('click', graphCpuSystem);
 
     // cpu by cpu
     var templateCpu=`<tr><td>Cpu specId</td><td><span id="cpuspecId" class="space-left">specPercent%</span></td></tr>`
@@ -418,71 +452,9 @@ function viewCpu() {
             });
         });
     }
-    
-    callGlances("cpu/history", processRequestCpuChart);
 
 }
 
-function processRequestCpuChart(e) {
-    if (e.target.readyState == 4 && e.target.status == 200) {
-        var datas = JSON.parse(e.target.responseText);
-        var data = {"system" : [], "user" : [], "total" : [], "labels" : []};
-        for (var i = datas.system.length; i >= 1 ; --i) {
-            data.labels.push(datas.system[datas.system.length - i][0])
-            data.system.push(datas.system[datas.system.length - i][1])
-            data.user.push(datas.user[datas.system.length - i][1])
-            data.total.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
-        } 
-        var ctx = document.getElementById("chartCpu");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.labels,
-                datasets:[{
-                    label : 'system',
-                    data : data.system,
-                    pointRadius : 0,
-                    borderColor : 'rgb(76,175,80)'
-                    
-                },{
-                    label : 'user',
-                    data : data.user,
-                    pointRadius : 0,
-                    borderColor : 'rgb(68,138,255)'
-                },{
-                    label : 'total',
-                    data : data.total,
-                    pointRadius : 0,
-                    borderColor : 'rgb(255,64,129)'
-                }]
-            },
-            options: {
-                animation: {
-                    duration: 0
-                },
-                legend: {
-                    position: 'right'
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: 100,
-                            stepSize: 50
-                        }
-                    }],
-                    xAxes: [
-                        {
-                            display: false
-                        }
-                      ],
-                },                
-            responsive: true,
-            maintainAspectRatio: false
-            }
-        });
-    };
-}
 
 function viewLoad() {
     document.getElementById("load-cpucore").innerText = all.load.cpucore;
