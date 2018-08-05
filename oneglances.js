@@ -365,17 +365,19 @@ function viewCpu() {
                                 .replace("specId",i)
                         ));
         updateColorElt(document.getElementById("cpu"+i), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.percpu[i].total);
-        document.getElementById("cpu"+i).addEventListener('click', function() {
-            
+        
+        document.getElementById("cpu"+i).addEventListener('click', function(event) {
+            var targetElement = event.target || event.srcElement;
+            var idCpu = targetElement.id.substring(3,targetElement.id.length);
             callGlances("percpu/history", function processRequestPerCpuChart(e) {
                 if (e.target.readyState == 4 && e.target.status == 200) {
                     var datas = JSON.parse(e.target.responseText);
                     var data = {"values" : [], "labels" : []};
-                    for (var k = datas[i+'_system'].length; k >= 1 ; --k) {
-                        data.labels.push(datas[i+'_system'][datas.system.length - k][0])
-                        data.values.push(datas[i+'_user'][datas[i+'_system'].length - k][1]+datas[i+'_system'][datas[i+'_system'].length - k][1])
+                    for (var k = datas[idCpu+'_system'].length; k >= 1 ; --k) {
+                        data.labels.push(datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][0])
+                        data.values.push(datas[idCpu+'_user'][datas[idCpu+'_system'].length - k][1]+datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][1])
                     } 
-                    OpenChartTempory(data, "Cpu " + i, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+                    OpenChartTempory(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
                 }
 
             });
