@@ -77,9 +77,9 @@ function epochToDate(timestamp){
 function FileConvertSize(aSize){
     try {
         aSize = Math.abs(parseInt(aSize, 10));
-        var def = [[1, 'octets'], [1024, 'ko'], [1024*1024, 'Mo'], [1024*1024*1024, 'Go'], [1024*1024*1024*1024, 'To']];
+        var def = [[1, 'o', 0], [1024, 'ko', 2], [1024*1024, 'Mo', 2], [1024*1024*1024, 'Go', 2], [1024*1024*1024*1024, 'To', 2]];
         for(var i=0; i<def.length; i++){
-            if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(2)+' '+def[i-1][1];
+            if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(def[i-1][2])+' '+def[i-1][1];
         }        
     } catch (error) {
         return aSize;
@@ -225,18 +225,18 @@ function processRequestCpuChart(e) {
                     label : 'system',
                     data : data.system,
                     pointRadius : 0,
-                    borderColor : rgb(76,175,80)
+                    borderColor : 'rgb(76,175,80)'
                     
                 },{
                     label : 'user',
                     data : data.user,
                     pointRadius : 0,
-                    borderColor : rgb(68,138,255)
+                    borderColor : 'rgb(68,138,255)'
                 },{
                     label : 'total',
                     data : data.total,
                     pointRadius : 0,
-                    borderColor : rgb(255,64,129)
+                    borderColor : 'rgb(255,64,129)'
                 }]
             },
             options: {

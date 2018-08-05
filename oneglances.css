@@ -132,10 +132,6 @@ body {
 }
 
 @media (max-width: 500px) {
-    .no-mobile {
-        display: none;
-    }
-
     .quickbox, .box {
         width: 100%; 
     }
