@@ -245,12 +245,12 @@ function viewMemory() {
 
         });
     };
-    document.getElementById("circles-memory-mem").addEventListener('click', graphMemory);
-    document.getElementById("circles-memory-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
-    document.getElementById("circles-memory-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
+    document.getElementById("circles-memory-mem").parentElement.addEventListener('click', graphMemory);
+    //document.getElementById("circles-memory-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
+    //document.getElementById("circles-memory-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
     document.getElementById("circles-quicklook-mem").addEventListener('click', graphMemory);
-    document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
-    document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
+    //document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
+    //document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
 
 }
 
@@ -280,11 +280,11 @@ function viewSwap() {
         });
     };
     document.getElementById("circles-swap-swap").addEventListener('click', graphSwap);
-    document.getElementById("circles-swap-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
-    document.getElementById("circles-swap-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
+    //document.getElementById("circles-swap-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
+    //document.getElementById("circles-swap-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
     document.getElementById("circles-quicklook-swap").addEventListener('click', graphSwap);
-    document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
-    document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
+    //document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
+    //document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
 
 }
 
@@ -325,11 +325,11 @@ function viewCpu() {
         });
     };
     document.getElementById("circles-cpu-cpu").addEventListener('click', graphCpu);
-    document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
-    document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
+    //document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
+    ///document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
     document.getElementById("circles-quicklook-cpu").addEventListener('click', graphCpu);
-    document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
-    document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
+    //document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
+    //document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
     
     // chart cpu user
     var graphCpuUser = function(event) {
