@@ -365,21 +365,28 @@ function viewCpu() {
 
     
     // chart cpu
-    document.getElementById("circles-cpu-cpu").addEventListener('click', function(event) {
+    var graphCpu = function(event) {
         callGlances("cpu/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
                 var data = {"values" : [], "labels" : []};
                 for (var i = datas.system.length; i >= 1 ; --i) {
                     data.labels.push(datas.system[datas.system.length - i][0])
-                    data.total.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
+                    data.values.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
                 }
                 OpenChartTemporary(data, "Cpu", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
         });
-    });
+    };
+    document.getElementById("circles-cpu-cpu").addEventListener('click', graphCpu);
+    document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
+    document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
+    document.getElementById("circles-quicklook-cpu").addEventListener('click', graphCpu);
+    document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
+    document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
 
+    // cpu by cpu
     var templateCpu=`<tr><td>Cpu specId</td><td><span id="cpuspecId" class="space-left">specPercent%</span></td></tr>`
     var byCpu = document.getElementById("bycpu");
     while (byCpu.firstChild) {
