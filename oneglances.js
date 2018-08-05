@@ -21,7 +21,16 @@ function OpenChartTempory(data, label, yAxes) {
         dialogPolyfill.registerDialog(dialog);
     };
 
-    var ctx = document.getElementById("chartTempory");
+    while (document.getElementById("dialog-content").firstChild) {
+        document.getElementById("dialog-content").removeChild(document.getElementById("dialog-content").firstChild);
+    }
+    var chart = document.createElement('canvas');
+    chart.setAttribute("id","chartTemporary");
+    chart.setAttribute("width","90%");
+    chart.setAttribute("height","200px");
+    document.getElementById("dialog-content").appendChild(chart);
+
+    var ctx = document.getElementById("chartTemporary");
     var myLineChart = new Chart(ctx, {
         type: 'line',
         data: {
