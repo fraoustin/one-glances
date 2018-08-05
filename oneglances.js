@@ -6,6 +6,57 @@ var circles = [];
 var colorCircle = ['rgb(76,175,80)', 'rgb(68,138,255)', 'rgb(255,152,0)', 'rgb(255,64,129)']; //['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
 
+function clickCloseDialog() {
+    var dialog = document.querySelector('dialog');
+    dialog.close();
+}
+
+function OpenChartTempory(data, label, yAxes) {
+    // var data = {"values" : [],  "labels" : []};
+    // var label = "label";
+    // var yAxes = [];
+    var dialog = document.querySelector('dialog');
+    var showDialogButton = document.querySelector('#show-dialog');
+    if (!dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+    };
+
+    var ctx = document.getElementById("chartTempory");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets:[{
+                    label : label,
+                    data : data.values,
+                    pointRadius : 0,
+                    borderColor : 'rgb(68,138,255)'
+                    
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 0
+                },
+                legend: {
+                    position: 'right'
+                },
+                scales: {
+                    yAxes: yAxes,
+                    xAxes: [
+                        {
+                            display: false
+                        }
+                      ],
+                },                
+            responsive: true,
+            maintainAspectRatio: false
+            }
+        });
+    
+    dialog.showModal();
+}
+
 function checkPanel(panel, elt) {
     if (elt) {
         try {
@@ -314,6 +365,9 @@ function viewCpu() {
                                 .replace("specId",i)
                         ));
         updateColorElt(document.getElementById("cpu"+i), [limit.quicklook.cpu_careful, limit.quicklook.cpu_warning, limit.quicklook.cpu_critical] , all.percpu[i].total);
+        document.getElementById("cpu"+i).addEventListener('click', function() {
+            OpenChartTempory({"values" : [],  "labels" : []}, "label", []);
+          });
     }
     
     callGlances("cpu/history", processRequestCpuChart);

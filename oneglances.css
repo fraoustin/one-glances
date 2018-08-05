@@ -139,7 +139,7 @@ body {
         display: none;
     }
     .only-mobile {
-        display: inline;
+        display: table-cell;
     }
     .quickbox, .box {
         width: 100%; 

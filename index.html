@@ -38,6 +38,14 @@
       
 <!-- Always shows a header, even in smaller screens. -->
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <dialog class="mdl-dialog">
+        <div id="chartDialog">            
+            <canvas id="chartTempory" width="90%" height="200px"></canvas>
+        </div>
+        <div class="mdl-dialog__actions">
+            <button type="button" class="mdl-button" onclick="clickCloseDialog()">Close</button>
+        </div>
+    </dialog>
     <main class="mdl-layout__content">
         <ul class="mdl-list" id="menu">
             <li class="mdl-list__item">
