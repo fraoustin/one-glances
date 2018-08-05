@@ -188,7 +188,7 @@ function processRequestMemoryChart(e) {
                     label : 'memory',
                     data : data.values,
                     pointRadius : 0,
-                    borderColor : 'rgb(76,175,80)'
+                    borderColor : 'rgb(68,138,255)'
                     
                 }]
             },
@@ -250,7 +250,7 @@ function processRequestSwapChart(e) {
                     label : 'swap',
                     data : data.values,
                     pointRadius : 0,
-                    borderColor : 'rgb(76,175,80)'
+                    borderColor : 'rgb(68,138,255)'
                     
                 }]
             },
@@ -387,6 +387,69 @@ function viewLoad() {
     document.getElementById("load-min1").innerText = all.load.min1;
     document.getElementById("load-min5").innerText = all.load.min5;
     document.getElementById("load-min15").innerText = all.load.min15;
+
+    callGlances("load/history", processRequestLoadChart);
+}
+
+function processRequestLoadChart(e) {
+    if (e.target.readyState == 4 && e.target.status == 200) {
+        var datas = JSON.parse(e.target.responseText);
+        var data = {"min1" : [],  "min5" : [],"min15" : [],"labels" : []};
+        for (var i = datas.percent.length; i >= 1 ; --i) {
+            data.labels.push(datas.min1[datas.min1.length - i][0])
+            data.min1.push(datas.min1[datas.min1.length - i][1])
+            data.min5.push(datas.min5[datas.min1.length - i][1])
+            data.min15.push(datas.min15[datas.min1.length - i][1])
+        } 
+        var ctx = document.getElementById("chartSwap");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets:[{
+                    label : 'min1',
+                    data : data.min1,
+                    pointRadius : 0,
+                    borderColor : 'rgb(76,175,80)'
+                    
+                },{
+                    label : 'min5',
+                    data : data.min5,
+                    pointRadius : 0,
+                    borderColor : 'rgb(68,138,255)'
+                },{
+                    label : 'min15',
+                    data : data.min15,
+                    pointRadius : 0,
+                    borderColor : 'rgb(255,64,129)'
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 0
+                },
+                legend: {
+                    position: 'right'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                            stepSize: 50
+                        }
+                    }],
+                    xAxes: [
+                        {
+                            display: false
+                        }
+                      ],
+                },                
+            responsive: true,
+            maintainAspectRatio: false
+            }
+        });
+    };
 }
 
 function viewAlert() {
