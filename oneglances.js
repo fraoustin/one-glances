@@ -262,11 +262,7 @@ function viewMemory() {
         });
     };
     document.getElementById("circles-memory-mem").parentElement.addEventListener('click', graphMemory);
-    //document.getElementById("circles-memory-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
-    //document.getElementById("circles-memory-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
     document.getElementById("circles-quicklook-mem").addEventListener('click', graphMemory);
-    //document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
-    //document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
 
 }
 
@@ -282,6 +278,7 @@ function viewSwap() {
     
     // chart swap
     var graphSwap = function(event) {
+        waitIhmStart();
         callGlances("swap/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -290,17 +287,14 @@ function viewSwap() {
                     data.labels.push(datas.percent[datas.percent.length - i][0])
                     data.values.push(datas.percent[datas.percent.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "Swap", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
         });
     };
     document.getElementById("circles-swap-swap").addEventListener('click', graphSwap);
-    //document.getElementById("circles-swap-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
-    //document.getElementById("circles-swap-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
     document.getElementById("circles-quicklook-swap").addEventListener('click', graphSwap);
-    //document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
-    //document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
 
 }
 
@@ -327,6 +321,7 @@ function viewCpu() {
     
     // chart cpu
     var graphCpu = function(event) {
+        waitIhmStart();
         callGlances("cpu/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -335,20 +330,18 @@ function viewCpu() {
                     data.labels.push(datas.system[datas.system.length - i][0])
                     data.values.push(datas.user[datas.system.length - i][1]+datas.system[datas.system.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "Cpu", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
         });
     };
     document.getElementById("circles-cpu-cpu").addEventListener('click', graphCpu);
-    //document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
-    ///document.getElementById("circles-cpu-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
     document.getElementById("circles-quicklook-cpu").addEventListener('click', graphCpu);
-    //document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphCpu);
-    //document.getElementById("circles-quicklook-cpu").getElementsByClassName('circles-text')[0].addEventListener('click', graphCpu);
     
     // chart cpu user
     var graphCpuUser = function(event) {
+        waitIhmStart();
         callGlances("cpu/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -357,6 +350,7 @@ function viewCpu() {
                     data.labels.push(datas.system[datas.system.length - i][0])
                     data.values.push(datas.user[datas.system.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "Cpu User", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
@@ -366,6 +360,7 @@ function viewCpu() {
 
     // chart cpu system
     var graphCpuSystem = function(event) {
+        waitIhmStart();
         callGlances("cpu/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -374,6 +369,7 @@ function viewCpu() {
                     data.labels.push(datas.system[datas.system.length - i][0])
                     data.values.push(datas.system[datas.system.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "Cpu System", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
@@ -397,6 +393,7 @@ function viewCpu() {
         
         // chart by cpu by dialog
         document.getElementById("cpu"+i).addEventListener('click', function(event) {
+            waitIhmStart();
             var targetElement = event.target || event.srcElement;
             var idCpu = targetElement.id.substring(3,targetElement.id.length);
             callGlances("percpu/history", function processRequestPerCpuChart(e) {
@@ -407,6 +404,7 @@ function viewCpu() {
                         data.labels.push(datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][0])
                         data.values.push(datas[idCpu+'_user'][datas[idCpu+'_system'].length - k][1]+datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][1])
                     } 
+                    waitIhmStop();
                     OpenChartTemporary(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
                 }
 
@@ -426,6 +424,7 @@ function viewLoad() {
     
     // chart min1
     var graphMin1 = function(event) {
+        waitIhmStart();
         callGlances("load/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -434,6 +433,7 @@ function viewLoad() {
                     data.labels.push(datas.min1[datas.min1.length - i][0])
                     data.values.push(datas.min1[datas.min1.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "load min1", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
@@ -443,6 +443,7 @@ function viewLoad() {
 
     // chart min5
     var graphMin5 = function(event) {
+        waitIhmStart();
         callGlances("load/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -451,6 +452,7 @@ function viewLoad() {
                     data.labels.push(datas.min5[datas.min5.length - i][0])
                     data.values.push(datas.min5[datas.min5.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "load min5", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
@@ -460,6 +462,7 @@ function viewLoad() {
 
     // chart min15
     var graphMin15 = function(event) {
+        waitIhmStart();
         callGlances("load/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -468,6 +471,7 @@ function viewLoad() {
                     data.labels.push(datas.min15[datas.min15.length - i][0])
                     data.values.push(datas.min15[datas.min15.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "load min15", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
@@ -645,6 +649,7 @@ function viewDocker() {
             
         // chart by cpu by docker
         document.getElementById("Cpu"+all.docker.containers[i].name).addEventListener('click', function(event) {
+            waitIhmStart();
             var targetElement = event.target || event.srcElement;
             var idCpu = targetElement.id.substring(3,targetElement.id.length);
             callGlances("docker/history", function processRequestPerCpuChart(e) {
@@ -655,6 +660,7 @@ function viewDocker() {
                         data.labels.push(datas[idCpu+'_cpu_percent'][datas[idCpu+'_cpu_percent'].length - k][0])
                         data.values.push(datas[idCpu+'_cpu_percent'][datas[idCpu+'_cpu_percent'].length - k][1])
                     } 
+                    waitIhmStop();
                     OpenChartTemporary(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
                 }
 

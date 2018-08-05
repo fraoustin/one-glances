@@ -91,7 +91,7 @@ body {
     border-left-color: grey;
 }
 
-.quickbox.defaultt {
+.quickbox.default {
     border-left-color: rgb(76,175,80);
 }
 
@@ -137,6 +137,15 @@ body {
 .only-mobile {
     display: none;
 }
+
+#waitihm > #dialog-content {
+    text-align: center;
+}
+#waitihm > #dialog-content > .mdl-spinner {
+    width: 56px;
+    height: 56px;
+}
+ 
 
 @media (max-width: 700px) {
     .no-mobile {
