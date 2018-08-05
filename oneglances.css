@@ -134,16 +134,19 @@ body {
     display: none;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 700px) {
     .no-mobile {
         display: none;
+    }
+    .only-mobile {
+        display: inline;
     }
     .quickbox, .box {
         width: 100%; 
     }
 }
 
-@media (min-width: 500px) and (max-width: 900px) {
+@media (min-width: 700px) and (max-width: 900px) {
 
     .quickbox, .box {
         width: 40%; 
