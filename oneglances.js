@@ -168,6 +168,56 @@ function viewMemory() {
     document.getElementById("memory-shared").innerText = FileConvertSize(all.mem.shared);
     document.getElementById("memory-total").innerText = FileConvertSize(all.mem.total);
     document.getElementById("memory-buffers").innerText = FileConvertSize(all.mem.buffers);
+    callGlances("mem/history", processRequestMemoryChart);
+}
+
+function processRequestMemoryChart(e) {
+    if (e.target.readyState == 4 && e.target.status == 200) {
+        var datas = JSON.parse(e.target.responseText);
+        var data = {"values" : [],  "labels" : []};
+        for (var i = datas.percent.length; i >= 1 ; --i) {
+            data.labels.push(datas.percent[datas.system.percent - i][0])
+            data.values.push(datas.percent[datas.percent.length - i][1])
+        } 
+        var ctx = document.getElementById("chartMemory");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets:[{
+                    label : 'memory',
+                    data : data.values,
+                    pointRadius : 0,
+                    borderColor : 'rgb(76,175,80)'
+                    
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 0
+                },
+                legend: {
+                    position: 'right'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                            stepSize: 50
+                        }
+                    }],
+                    xAxes: [
+                        {
+                            display: false
+                        }
+                      ],
+                },                
+            responsive: true,
+            maintainAspectRatio: false
+            }
+        });
+    };
 }
 
 function viewSwap() {
@@ -179,6 +229,57 @@ function viewSwap() {
     document.getElementById("swap-total").innerText = FileConvertSize(all.memswap.total);
     document.getElementById("swap-free").innerText = FileConvertSize(all.memswap.free);
     document.getElementById("swap-sin").innerText = FileConvertSize(all.memswap.sin);
+
+    callGlances("swap/history", processRequestSwapChart);
+}
+
+function processRequestSwapChart(e) {
+    if (e.target.readyState == 4 && e.target.status == 200) {
+        var datas = JSON.parse(e.target.responseText);
+        var data = {"values" : [],  "labels" : []};
+        for (var i = datas.percent.length; i >= 1 ; --i) {
+            data.labels.push(datas.percent[datas.system.percent - i][0])
+            data.values.push(datas.percent[datas.percent.length - i][1])
+        } 
+        var ctx = document.getElementById("chartSwap");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets:[{
+                    label : 'swap',
+                    data : data.values,
+                    pointRadius : 0,
+                    borderColor : 'rgb(76,175,80)'
+                    
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 0
+                },
+                legend: {
+                    position: 'right'
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                            stepSize: 50
+                        }
+                    }],
+                    xAxes: [
+                        {
+                            display: false
+                        }
+                      ],
+                },                
+            responsive: true,
+            maintainAspectRatio: false
+            }
+        });
+    };
 }
 
 function viewCpu() {
@@ -253,6 +354,9 @@ function processRequestCpuChart(e) {
                 }]
             },
             options: {
+                animation: {
+                    duration: 0
+                },
                 legend: {
                     position: 'right'
                 },

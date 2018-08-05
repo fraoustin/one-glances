@@ -130,17 +130,20 @@ body {
 .space-right {
     margin-right: 10px;
 }
+.only-mobile {
+    display: none;
+}
 
 @media (max-width: 500px) {
+    .no-mobile {
+        display: none;
+    }
     .quickbox, .box {
         width: 100%; 
     }
 }
 
 @media (min-width: 500px) and (max-width: 900px) {
-    .no-mobile {
-        display: none;
-    }
 
     .quickbox, .box {
         width: 40%; 
