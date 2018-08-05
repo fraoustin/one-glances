@@ -229,56 +229,29 @@ function viewMemory() {
     document.getElementById("memory-shared").innerText = FileConvertSize(all.mem.shared);
     document.getElementById("memory-total").innerText = FileConvertSize(all.mem.total);
     document.getElementById("memory-buffers").innerText = FileConvertSize(all.mem.buffers);
-    callGlances("mem/history", processRequestMemoryChart);
-}
-
-function processRequestMemoryChart(e) {
-    if (e.target.readyState == 4 && e.target.status == 200) {
-        var datas = JSON.parse(e.target.responseText);
-        var data = {"values" : [],  "labels" : []};
-        for (var i = datas.percent.length; i >= 1 ; --i) {
-            data.labels.push(datas.percent[datas.percent.length - i][0])
-            data.values.push(datas.percent[datas.percent.length - i][1])
-        } 
-        var ctx = document.getElementById("chartMemory");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.labels,
-                datasets:[{
-                    label : 'memory',
-                    data : data.values,
-                    pointRadius : 0,
-                    borderColor : 'rgb(68,138,255)'
-                    
-                }]
-            },
-            options: {
-                animation: {
-                    duration: 0
-                },
-                legend: {
-                    position: 'right'
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: 100,
-                            stepSize: 50
-                        }
-                    }],
-                    xAxes: [
-                        {
-                            display: false
-                        }
-                      ],
-                },                
-            responsive: true,
-            maintainAspectRatio: false
+    
+    // chart memory
+    var graphMemory = function(event) {
+        callGlances("mem/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.percent.length; i >= 1 ; --i) {
+                    data.labels.push(datas.percent[datas.percent.length - i][0])
+                    data.values.push(datas.percent[datas.percent.length - i][1])
+                }
+                OpenChartTemporary(data, "Memory", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
+
         });
     };
+    document.getElementById("circles-memory-mem").addEventListener('click', graphMemory);
+    document.getElementById("circles-memory-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
+    document.getElementById("circles-memory-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
+    document.getElementById("circles-quicklook-mem").addEventListener('click', graphMemory);
+    document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphMemory);
+    document.getElementById("circles-quicklook-mem").getElementsByClassName('circles-text')[0].addEventListener('click', graphMemory);
+
 }
 
 function viewSwap() {
@@ -290,57 +263,29 @@ function viewSwap() {
     document.getElementById("swap-total").innerText = FileConvertSize(all.memswap.total);
     document.getElementById("swap-free").innerText = FileConvertSize(all.memswap.free);
     document.getElementById("swap-sin").innerText = FileConvertSize(all.memswap.sin);
-
-    callGlances("swap/history", processRequestSwapChart);
-}
-
-function processRequestSwapChart(e) {
-    if (e.target.readyState == 4 && e.target.status == 200) {
-        var datas = JSON.parse(e.target.responseText);
-        var data = {"values" : [],  "labels" : []};
-        for (var i = datas.percent.length; i >= 1 ; --i) {
-            data.labels.push(datas.percent[datas.percent.length - i][0])
-            data.values.push(datas.percent[datas.percent.length - i][1])
-        } 
-        var ctx = document.getElementById("chartSwap");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.labels,
-                datasets:[{
-                    label : 'swap',
-                    data : data.values,
-                    pointRadius : 0,
-                    borderColor : 'rgb(68,138,255)'
-                    
-                }]
-            },
-            options: {
-                animation: {
-                    duration: 0
-                },
-                legend: {
-                    position: 'right'
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: 100,
-                            stepSize: 50
-                        }
-                    }],
-                    xAxes: [
-                        {
-                            display: false // not true because modal
-                        }
-                      ],
-                },                
-            responsive: true,
-            maintainAspectRatio: false
+    
+    // chart swap
+    var graphSwap = function(event) {
+        callGlances("swap/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.percent.length; i >= 1 ; --i) {
+                    data.labels.push(datas.percent[datas.percent.length - i][0])
+                    data.values.push(datas.percent[datas.percent.length - i][1])
+                }
+                OpenChartTemporary(data, "Swap", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
+
         });
     };
+    document.getElementById("circles-swap-swap").addEventListener('click', graphSwap);
+    document.getElementById("circles-swap-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
+    document.getElementById("circles-swap-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
+    document.getElementById("circles-quicklook-swap").addEventListener('click', graphSwap);
+    document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-wrp')[0].addEventListener('click', graphSwap);
+    document.getElementById("circles-quicklook-swap").getElementsByClassName('circles-text')[0].addEventListener('click', graphSwap);
+
 }
 
 function viewCpu() {
@@ -461,65 +406,60 @@ function viewLoad() {
     updateColorElt(document.getElementById("load-cpucore"), [limit.load.load_careful, limit.load.load_warning, limit.load.load_critical] , all.load.cpucore);
     document.getElementById("load-min1").innerText = all.load.min1;
     document.getElementById("load-min5").innerText = all.load.min5;
-    document.getElementById("load-min15").innerText = all.load.min15;
-
-    callGlances("load/history", processRequestLoadChart);
-}
-
-function processRequestLoadChart(e) {
-    if (e.target.readyState == 4 && e.target.status == 200) {
-        var datas = JSON.parse(e.target.responseText);
-        var data = {"min1" : [],  "min5" : [],"min15" : [],"labels" : []};
-        for (var i = datas.min1.length; i >= 1 ; --i) {
-            data.labels.push(datas.min1[datas.min1.length - i][0])
-            data.min1.push(datas.min1[datas.min1.length - i][1])
-            data.min5.push(datas.min5[datas.min1.length - i][1])
-            data.min15.push(datas.min15[datas.min1.length - i][1])
-        } 
-        var ctx = document.getElementById("chartLoad");
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.labels,
-                datasets:[{
-                    label : 'min1',
-                    data : data.min1,
-                    pointRadius : 0,
-                    borderColor : 'rgb(76,175,80)'
-                    
-                },{
-                    label : 'min5',
-                    data : data.min5,
-                    pointRadius : 0,
-                    borderColor : 'rgb(68,138,255)'
-                },{
-                    label : 'min15',
-                    data : data.min15,
-                    pointRadius : 0,
-                    borderColor : 'rgb(255,64,129)'
-                }]
-            },
-            options: {
-                animation: {
-                    duration: 0
-                },
-                legend: {
-                    position: 'right'
-                },
-                scales: {
-                    yAxes: [],
-                    xAxes: [
-                        {
-                            display: false
-                        }
-                      ],
-                },                
-            responsive: true,
-            maintainAspectRatio: false
+    document.getElementById("load-min15").innerText = all.load.min15;   
+    
+    // chart min1
+    var graphMin1 = function(event) {
+        callGlances("load/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.min1.length; i >= 1 ; --i) {
+                    data.labels.push(datas.min1[datas.min1.length - i][0])
+                    data.values.push(datas.min1[datas.min1.length - i][1])
+                }
+                OpenChartTemporary(data, "load min1", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
+
         });
     };
+    document.getElementById("load-min1").addEventListener('click', graphMin1);
+
+    // chart min5
+    var graphMin5 = function(event) {
+        callGlances("load/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.min5.length; i >= 1 ; --i) {
+                    data.labels.push(datas.min5[datas.min5.length - i][0])
+                    data.values.push(datas.min5[datas.min5.length - i][1])
+                }
+                OpenChartTemporary(data, "load min5", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("load-min5").addEventListener('click', graphMin5);
+
+    // chart min15
+    var graphMin15 = function(event) {
+        callGlances("load/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.min15.length; i >= 1 ; --i) {
+                    data.labels.push(datas.min15[datas.min15.length - i][0])
+                    data.values.push(datas.min15[datas.min15.length - i][1])
+                }
+                OpenChartTemporary(data, "load min15", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
+            }
+
+        });
+    };
+    document.getElementById("load-min15").addEventListener('click', graphMin15);
 }
+
 
 function viewAlert() {
     var templateAlert=`<tr><td>spec0</td><td>spec1</td><td>spec2</td><td>spec3</td><td>spec4</td></tr>`
