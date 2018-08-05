@@ -432,13 +432,7 @@ function processRequestLoadChart(e) {
                     position: 'right'
                 },
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            max: 100,
-                            stepSize: 50
-                        }
-                    }],
+                    yAxes: [],
                     xAxes: [
                         {
                             display: false
