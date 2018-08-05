@@ -17,6 +17,9 @@ function OpenDialog() {
     if (!dialog.showModal) {
         dialogPolyfill.registerDialog(dialog);
     };    
+    var info = document.createElement('div');
+    info.innerHTML = "coucou";
+    document.getElementById("dialog-content").appendChild(info);
     dialog.showModal();
 }
 
