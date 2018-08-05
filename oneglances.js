@@ -11,15 +11,49 @@ function clickCloseDialog() {
     dialog.close();
 }
 
-function OpenDialog() {
+function OpenChartTempory(data, label, yAxes) {
+    // var data = {"values" : [],  "labels" : []};
+    // var label = "label";
+    // var yAxes = [];
     var dialog = document.querySelector('dialog');
     var showDialogButton = document.querySelector('#show-dialog');
     if (!dialog.showModal) {
         dialogPolyfill.registerDialog(dialog);
-    };    
-    var info = document.createElement('div');
-    info.innerHTML = "coucou";
-    document.getElementById("dialog-content").appendChild(info);
+    };
+
+    var ctx = document.getElementById("chartTempory");
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets:[{
+                label : label,
+                data : data.values,
+                pointRadius : 0,
+                borderColor : 'rgb(68,138,255)'
+                
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            legend: {
+                position: 'right'
+            },
+            scales: {
+                yAxes: yAxes,
+                xAxes: [
+                    {
+                        display: false
+                    }
+                    ],
+            },                
+        responsive: true,
+        maintainAspectRatio: false
+        }
+    });
+    
     dialog.showModal();
 }
 
@@ -342,41 +376,8 @@ function viewCpu() {
                     for (var k = datas[idCpu+'_system'].length; k >= 1 ; --k) {
                         data.labels.push(datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][0])
                         data.values.push(datas[idCpu+'_user'][datas[idCpu+'_system'].length - k][1]+datas[idCpu+'_system'][datas[idCpu+'_system'].length - k][1])
-                    }                     
-
-                    var ctx = document.getElementById("chartTempory");
-                    var myLineChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: data.labels,
-                            datasets:[{
-                                label : "Cpu " + idCpu,
-                                data : data.values,
-                                pointRadius : 0,
-                                borderColor : 'rgb(68,138,255)'
-                                
-                            }]
-                        },
-                        options: {
-                            animation: {
-                                duration: 0
-                            },
-                            legend: {
-                                position: 'right'
-                            },
-                            scales: {
-                                yAxes: [{ ticks: { min: 0, max: 100, stepSize: 50 } }],
-                                xAxes: [
-                                    {
-                                        display: false
-                                    }
-                                    ],
-                            },                
-                        responsive: true,
-                        maintainAspectRatio: false
-                        }
-                    });
-                    OpenDialog();
+                    } 
+                    OpenChartTempory(data, "Cpu " + idCpu, [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
                 }
 
             });
