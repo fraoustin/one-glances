@@ -401,7 +401,7 @@ function processRequestLoadChart(e) {
             data.min5.push(datas.min5[datas.min1.length - i][1])
             data.min15.push(datas.min15[datas.min1.length - i][1])
         } 
-        var ctx = document.getElementById("chartSwap");
+        var ctx = document.getElementById("chartLoad");
         var myLineChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -490,7 +490,7 @@ function viewNetwork() {
 }
 
 function viewPort() {
-    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
+    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
     var port = document.getElementById("port").getElementsByTagName("tbody")[0];
     while (port.firstChild) {
         port.removeChild(port.firstChild);
@@ -498,14 +498,17 @@ function viewPort() {
     for (var i = 0; i < all.ports.length; ++i) {
         port.appendChild(htmlToElement(
             templatePort.replace("specName",all.ports[i].description)
+                .replace("specName",all.ports[i].description)
                 .replace("specStatus",all.ports[i].status)
                 .replace("specElapsed",defaultJson(all.ports[i], "elapsed", ""))
                 .replace("specId",i)
             ));
         if (all.ports[i].status == false) {
             document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("critical")
+            document.getElementById("port"+i).getElementsByTagName("td")[2].classList.add("critical")
         } else {
             document.getElementById("port"+i).getElementsByTagName("td")[1].classList.add("default")
+            document.getElementById("port"+i).getElementsByTagName("td")[2].classList.add("default")
         }
     }
 }
