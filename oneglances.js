@@ -6,6 +6,13 @@ var circles = [];
 var colorCircle = ['rgb(76,175,80)', 'rgb(68,138,255)', 'rgb(255,152,0)', 'rgb(255,64,129)']; //['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
 
+function addBadge(id, cnt) {
+    var badge = document.getElementById(id).getElementsByClassName("mdl-badge")[0];
+    badge.removeAttribute('data-badge');
+    if (cnt > 0) {
+        badge.setAttribute('data-badge',cnt);        
+    }
+}
 
 function waitIhmStart() {
     var dialog = document.getElementById("waitihm")
@@ -220,6 +227,11 @@ function viewQuickLook() {
     updateColorCircle(circles[2], [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
     updateColorElt(document.getElementById("quickbox-swap"), [limit.quicklook.swap_careful, limit.quicklook.swap_warning, limit.quicklook.swaps_critical] , all.quicklook.swap)
     document.getElementById("quicklook-procs").innerText = all.processcount.total + " PROCESS";
+    
+    //Badge
+    var cntBadge = document.getElementById('quicklook').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('quicklook').getElementsByClassName('warning').length;
+    addBadge('shortcut-quicklook', cntBadge)
 }
 
 function viewSystem() {
