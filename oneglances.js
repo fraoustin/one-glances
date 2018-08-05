@@ -484,7 +484,7 @@ function viewNetwork() {
 }
 
 function viewPort() {
-    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td>specStatus</td><td>specElapsed</td></tr>`
+    var templatePort=`<tr id="portspecId"><td  class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td>specElapsed</td></tr>`
     var port = document.getElementById("port").getElementsByTagName("tbody")[0];
     while (port.firstChild) {
         port.removeChild(port.firstChild);
