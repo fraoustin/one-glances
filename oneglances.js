@@ -395,7 +395,7 @@ function processRequestLoadChart(e) {
     if (e.target.readyState == 4 && e.target.status == 200) {
         var datas = JSON.parse(e.target.responseText);
         var data = {"min1" : [],  "min5" : [],"min15" : [],"labels" : []};
-        for (var i = datas.percent.length; i >= 1 ; --i) {
+        for (var i = datas.min1.length; i >= 1 ; --i) {
             data.labels.push(datas.min1[datas.min1.length - i][0])
             data.min1.push(datas.min1[datas.min1.length - i][1])
             data.min5.push(datas.min5[datas.min1.length - i][1])
