@@ -6,6 +6,20 @@ var circles = [];
 var colorCircle = ['rgb(76,175,80)', 'rgb(68,138,255)', 'rgb(255,152,0)', 'rgb(255,64,129)']; //['green', 'blue', 'orange', 'red'];
 var colorClassName = ['default', 'careful', 'warning', 'critical'];
 
+
+function waitIhmStart() {
+    var dialog = document.getElementById("waitihm")
+    if (!dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+    };
+    dialog.showModal();
+}
+function waitIhmStop() {
+    var dialog = document.getElementById("waitihm")
+    dialog.close();
+}
+
+
 function clickCloseDialog() {
     var dialog = document.querySelector('dialog');
     dialog.close();
@@ -232,6 +246,7 @@ function viewMemory() {
     
     // chart memory
     var graphMemory = function(event) {
+        waitIhmStart();
         callGlances("mem/history", function processRequestPerCpuChart(e) {
             if (e.target.readyState == 4 && e.target.status == 200) {
                 var datas = JSON.parse(e.target.responseText);
@@ -240,6 +255,7 @@ function viewMemory() {
                     data.labels.push(datas.percent[datas.percent.length - i][0])
                     data.values.push(datas.percent[datas.percent.length - i][1])
                 }
+                waitIhmStop();
                 OpenChartTemporary(data, "Memory", [{ ticks: { min: 0, max: 100, stepSize: 50 } }]);
             }
 
