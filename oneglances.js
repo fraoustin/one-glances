@@ -667,7 +667,7 @@ function viewThread() {
 function viewDocker() {
     document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td id="dockerspecIdCpu">specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
+    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td id="CpuspecName">specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
     var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
     while (docker.firstChild) {
         docker.removeChild(docker.firstChild);
@@ -685,16 +685,16 @@ function viewDocker() {
                 .replace("specRRead",FileConvertSize(all.docker.containers[i].network_tx))
                 .replace("specId",i)
                 .replace("specId",i)
-                .replace("specId",i)
+                .replace("specName",all.docker.containers[i].name)
             ));
             updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[1], 'running' , all.docker.containers[i].Status);
             updateColorEltText(document.getElementById("docker"+i).getElementsByTagName('td')[2], 'running' , all.docker.containers[i].Status);
 
             
         // chart by cpu by docker
-        document.getElementById("docker"+i+"Cpu").addEventListener('click', function(event) {
+        document.getElementById("Cpu"+all.docker.containers[i].name).addEventListener('click', function(event) {
             var targetElement = event.target || event.srcElement;
-            var idCpu = targetElement.id.substring(0,targetElement.id.length-12);
+            var idCpu = targetElement.id.substring(3,targetElement.id.length);
             callGlances("docker/history", function processRequestPerCpuChart(e) {
                 if (e.target.readyState == 4 && e.target.status == 200) {
                     var datas = JSON.parse(e.target.responseText);
