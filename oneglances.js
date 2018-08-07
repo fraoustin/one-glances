@@ -206,6 +206,7 @@ function processRequestAll(e) {
         if(checkPanel("load", all.load)) {viewLoad()};
         if(checkPanel("alert", all.alert)) {viewAlert()};
         if(checkPanel("network", all.network)) {viewNetwork()};
+        if(checkPanel("speedtest", all.speedtest)) {viewSpeedtest()};
         if(checkPanel("port", all.ports)) {viewPort()};
         if(checkPanel("diskio", all.diskio)) {viewDiskIO()};
         if(checkPanel("filesys", all.fs)) {viewFileSYS()};
@@ -554,6 +555,52 @@ function viewNetwork() {
     var cntBadge = document.getElementById('port').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('warning').length;
     addBadge('shortcut-network', cntBadge)
+}
+
+function viewSpeedtest() {
+    document.getElementById("speedtest-ip").innerText = FileConvertSize(all.speedtest.ip);
+    document.getElementById("speedtest-client").innerText = FileConvertSize(all.speedtest.client);
+    document.getElementById("speedtest-distance").innerText = FileConvertSize(all.speedtest.distance);
+    document.getElementById("speedtest-download").innerText = FileConvertSize(all.speedtest.download);
+    document.getElementById("speedtest-upload").innerText = FileConvertSize(all.speedtest.upload);
+    
+    // chart download
+    var graphSpeedtestDownload = function(event) {
+        waitIhmStart();
+        callGlances("speedtest/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.download.length; i >= 1 ; --i) {
+                    data.labels.push(datas.download[datas.download.length - i][0])
+                    data.values.push(datas.download[datas.download.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Download", []);
+            }
+
+        });
+    };
+    document.getElementById("speedtest-download").addEventListener('click', graphSpeedtestDownload);
+    
+    // chart upload
+    var graphSpeedtestUpload = function(event) {
+        waitIhmStart();
+        callGlances("speedtest/history", function processRequestPerCpuChart(e) {
+            if (e.target.readyState == 4 && e.target.status == 200) {
+                var datas = JSON.parse(e.target.responseText);
+                var data = {"values" : [], "labels" : []};
+                for (var i = datas.upload.length; i >= 1 ; --i) {
+                    data.labels.push(datas.upload[datas.upload.length - i][0])
+                    data.values.push(datas.upload[datas.upload.length - i][1])
+                }
+                waitIhmStop();
+                OpenChartTemporary(data, "Upload", []);
+            }
+
+        });
+    };
+    document.getElementById("speedtest-upload").addEventListener('click', graphSpeedtestUpload);
 }
 
 function viewPort() {
