@@ -15,6 +15,7 @@ if [ "$1" = 'app' ]; then
     sed -i 's/3/'$API'/g' /oneglances/one-glances/config.js
     sed -i 's/61208/'$PORT'/g' /oneglances/one-glances/config.js
     sed -i 's/127.0.0.1/'$SERVER'/g' /oneglances/one-glances/config.js
+    sed -i 's/http/'$HTTP'/g' /oneglances/one-glances/config.js
     nginx -g "daemon off;"
 fi
 
