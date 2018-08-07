@@ -119,11 +119,11 @@ function defaultJson(parent, son, def) {
 function updateColorElt(elt, levels, value) {
     // levels: careful, warning, critical
     color = colorClassName[0];
-    for (var i = 0; i < levels; ++i) {
+    for (var i = 0; i < levels.length; ++i) {
         if (value >= levels[i]) { color = colorClassName[i+1]}
     };
     // cleanColor
-    for (var i = 0; i < colorClassName; ++i) {
+    for (var i = 0; i < colorClassName.length; ++i) {
         if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
     };
     elt.classList.add(color);
@@ -136,7 +136,7 @@ function updateColorEltText(elt, level, value) {
         color = colorClassName[3];        
     }
     // cleanColor
-    for (var i = 0; i < colorClassName; ++i) {
+    for (var i = 0; i < colorClassName.length; ++i) {
         if (colorClassName[i] in elt.classList) { elt.classList.remove(colorClassName[i])}
     };
     elt.classList.add(color);
@@ -145,7 +145,7 @@ function updateColorEltText(elt, level, value) {
 function updateColorCircle(ci, levels, value) {
     // levels: careful, warning, critical
     color = colorCircle[0];
-    for (var i = 0; i < levels; ++i) {
+    for (var i = 0; i < levels.length; ++i) {
         if (value >= levels[i]) { color = colorCircle[i+1]}
     };
     ci.updateColors(['#FFFFFF', color]);
@@ -279,7 +279,7 @@ function viewMemory() {
     //Badge
     var cntBadge = document.getElementById('memory').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('memory').getElementsByClassName('warning').length;
-    var cntBadge = document.getElementById('swap').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('swap').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('swap').getElementsByClassName('warning').length;
     addBadge('shortcut-memory', cntBadge)
 
@@ -317,7 +317,7 @@ function viewSwap() {
     //Badge
     var cntBadge = document.getElementById('memory').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('memory').getElementsByClassName('warning').length;
-    var cntBadge = document.getElementById('swap').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('swap').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('swap').getElementsByClassName('warning').length;
     addBadge('shortcut-memory', cntBadge)
 
@@ -545,14 +545,14 @@ function viewNetwork() {
                                 .replace("specTx",FileConvertSize(all.network[i].tx))
                                 .replace("specId",i)
                             ));
-            updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[1], [limit.network.network_rx_careful, limit.network.network_rx_warning, limit.network.network_rx_critical] , all.network[i].rx);    
-            updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[2], [limit.network.network_tx_careful, limit.network.network_tx_warning, limit.network.network_tx_critical] , all.network[i].tx);  
+            //updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[1], [limit.network.network_rx_careful, limit.network.network_rx_warning, limit.network.network_rx_critical] , all.network[i].rx);    
+            //updateColorElt(document.getElementById("net"+i).getElementsByTagName("td")[2], [limit.network.network_tx_careful, limit.network.network_tx_warning, limit.network.network_tx_critical] , all.network[i].tx);  
         }
     }
     //Badge
     var cntBadge = document.getElementById('network').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('network').getElementsByClassName('warning').length;
-    var cntBadge = document.getElementById('port').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('warning').length;
     addBadge('shortcut-network', cntBadge)
 }
@@ -628,7 +628,7 @@ function viewPort() {
     //Badge
     var cntBadge = document.getElementById('network').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('network').getElementsByClassName('warning').length;
-    var cntBadge = document.getElementById('port').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('port').getElementsByClassName('warning').length;
     addBadge('shortcut-network', cntBadge)
 }
@@ -668,7 +668,7 @@ function viewFileSYS() {
     //Badge
     var cntBadge = document.getElementById('filesys').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('filesys').getElementsByClassName('warning').length;
-    var cntBadge = document.getElementById('sensor').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge + document.getElementById('sensor').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('sensor').getElementsByClassName('warning').length;
     addBadge('shortcut-diskio', cntBadge)
 }
@@ -690,7 +690,7 @@ function viewSensor() {
     //Badge
     var cntBadge = document.getElementById('filesys').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('filesys').getElementsByClassName('warning').length;
-    var cntBadge = document.getElementById('sensor').getElementsByClassName('critical').length;
+    var cntBadge = cntBadge +document.getElementById('sensor').getElementsByClassName('critical').length;
     var cntBadge = cntBadge + document.getElementById('sensor').getElementsByClassName('warning').length;
     addBadge('shortcut-diskio', cntBadge)
 }
