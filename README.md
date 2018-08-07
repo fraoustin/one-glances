@@ -42,7 +42,8 @@ your docker-compose
                 - CONTAINER_TIMEZONE=Europe/Paris
                 - SERVER=127.0.0.1
                 - PORT=80
-                - API 3
+                - API=3
+                - HTTP=http
             depends_on:
                 - glances
             restart: always

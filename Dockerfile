@@ -23,6 +23,7 @@ RUN cp /oneglances/one-glances/config.js /oneglances/one-glances/config.js.ini
 ENV SERVER 127.0.0.1
 ENV PORT 80
 ENV API 3
+ENV HTTP http
 
 EXPOSE 80
 
