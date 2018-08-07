@@ -558,9 +558,9 @@ function viewNetwork() {
 }
 
 function viewSpeedtest() {
-    document.getElementById("speedtest-ip").innerText = FileConvertSize(all.speedtest.ip);
-    document.getElementById("speedtest-client").innerText = FileConvertSize(all.speedtest.client);
-    document.getElementById("speedtest-distance").innerText = FileConvertSize(all.speedtest.distance);
+    document.getElementById("speedtest-ip").innerText = all.speedtest.ip;
+    document.getElementById("speedtest-client").innerText = all.speedtest.client;
+    document.getElementById("speedtest-distance").innerText = all.speedtest.distance;
     document.getElementById("speedtest-download").innerText = FileConvertSize(all.speedtest.download);
     document.getElementById("speedtest-upload").innerText = FileConvertSize(all.speedtest.upload);
     
