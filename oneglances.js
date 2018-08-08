@@ -649,7 +649,7 @@ function viewDiskIO() {
 }
 
 function viewFileSYS() {
-    var templateFileSYS=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td>specMnt</td><td>specUsed</td><td>specTotal</td><td id="fsspecId">specPercent%</td></tr>`
+    var templateFileSYS=`<tr><td class="mdl-data-table__cell--non-numeric">specName</td><td class="mdl-data-table__cell--non-numeric no-mobile">specMnt</td><td class="no-mobile">specUsed</td><td>specTotal</td><td id="fsspecId">specPercent%</td></tr>`
     var filesys = document.getElementById("filesys").getElementsByTagName("tbody")[0];
     while (filesys.firstChild) {
         filesys.removeChild(filesys.firstChild);
@@ -701,7 +701,7 @@ function viewThread() {
     document.getElementById("thread-run").innerText = all.processcount.running;
     document.getElementById("thread-sleep").innerText = all.processcount.sleeping;
 
-    var templateThread=`<tr id="threadspecId"><td>specCpu</td><td>specMem</td><td class="no-mobile">specUser</td><td>specCommand</td></tr>`
+    var templateThread=`<tr id="threadspecId"><td>specCpu</td><td class="no-mobile">specMem</td><td class="no-mobile">specUser</td><td>specCommand</td></tr>`
     var thread = document.getElementById("thread").getElementsByTagName("tbody")[0];
     while (thread.firstChild) {
         thread.removeChild(thread.firstChild);
@@ -730,7 +730,7 @@ function viewThread() {
 function viewDocker() {
     document.getElementById("docker-info").innerText = all.docker.version.Components[0].Version;
 
-    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td id="CpuspecName">specCpu%</td><td>specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
+    var templateDocker=`<tr id="dockerspecId"><td class="mdl-data-table__cell--non-numeric no-mobile">specName</td><td  class="mdl-data-table__cell--non-numeric only-mobile">specName</td><td class="no-mobile">specStatus</td><td id="CpuspecName">specCpu%</td><td class="no-mobile">specMem</td><td class="no-mobile">specWrite</td><td class="no-mobile">specRead</td><td class="no-mobile">specRWrite</td><td class="no-mobile">specRRead</td></tr>`
     var docker = document.getElementById("docker").getElementsByTagName("tbody")[0];
     while (docker.firstChild) {
         docker.removeChild(docker.firstChild);
