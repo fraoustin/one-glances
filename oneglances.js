@@ -175,7 +175,8 @@ function FileConvertSize(aSize){
         var def = [[1, 'o', 0], [1024, 'ko', 2], [1024*1024, 'Mo', 2], [1024*1024*1024, 'Go', 2], [1024*1024*1024*1024, 'To', 2]];
         for(var i=0; i<def.length; i++){
             if(aSize<def[i][0]) return (aSize/def[i-1][0]).toFixed(def[i-1][2])+' '+def[i-1][1];
-        }        
+        }
+        return (aSize/def[def.length-1][0]).toFixed(def[def.length-1][2])+' '+def[def.length-1][1]
     } catch (error) {
         return aSize;
     }
