@@ -606,17 +606,16 @@ function viewSpeedtest() {
 }
 
 function viewLogfiles() {
-    var templateLogfiles=`<h3>specPath</h3><span>specExtract</span>`
-    var divLogfiles = document.getElementById("logiles").getElementsByClassName("mdl-card__supporting-text")[0];
+    var templateLogfiles=`<div><div class="mdl-card__title"><h2 class="mdl-card__title-text">specPath</h2></div><div class="mdl-card__supporting-text flow">specExtract</div></div>`
+    var divLogfiles = document.getElementById("logfiles");
     while (divLogfiles.firstChild) {
         divLogfiles.removeChild(divLogfiles.firstChild);
     }
     for (var i = 0; i < all.logfiles.length; ++i) {
         divLogfiles.appendChild(htmlToElement(
             templateLogfiles.replace("specPath",all.logfiles[i].path)
-                            .replace("specExtract",all.logfiles[i].extract)
+                            .replace("specExtract",all.logfiles[i].extract.replace(/(?:\r\n|\r|\n)/g, '<br/>'))
                             ));
-        }
     }
 }
 
