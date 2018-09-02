@@ -212,6 +212,7 @@ function processRequestAll(e) {
         if(checkPanel("diskio", all.diskio)) {viewDiskIO()};
         if(checkPanel("filesys", all.fs)) {viewFileSYS()};
         if(checkPanel("sensors", all.sensors)) {viewSensor()};
+        if(checkPanel("logfiles", all.logfiles)) {viewLogfiles()};
         if(checkPanel("processlist", all.system)) {viewThread()};
         if(checkPanel("docker", all.system)) {viewDocker()};
     };
@@ -602,6 +603,21 @@ function viewSpeedtest() {
         });
     };
     document.getElementById("speedtest-upload").addEventListener('click', graphSpeedtestUpload);
+}
+
+function viewLogfiles() {
+    var templateLogfiles=`<h3>specPath</h3><span>specExtract</span>`
+    var divLogfiles = document.getElementById("logiles").getElementsByClassName("mdl-card__supporting-text")[0];
+    while (divLogfiles.firstChild) {
+        divLogfiles.removeChild(divLogfiles.firstChild);
+    }
+    for (var i = 0; i < all.logfiles.length; ++i) {
+        divLogfiles.appendChild(htmlToElement(
+            templateLogfiles.replace("specPath",all.logfiles[i].path)
+                            .replace("specExtract",all.logfiles[i].extract)
+                            ));
+        }
+    }
 }
 
 function viewPort() {
