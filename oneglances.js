@@ -616,7 +616,6 @@ function viewLogfiles() {
             templateLogfiles.replace("specPath",all.logfiles[i].path)
                             .replace("specExtract",all.logfiles[i].extract.replace(/(?:\r\n|\r|\n)/g, '<br/>'))
                             ));
-        }
     }
 }
 
