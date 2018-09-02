@@ -607,7 +607,7 @@ function viewSpeedtest() {
 
 function viewLogfiles() {
     var templateLogfiles=`<h3>specPath</h3><span>specExtract</span>`
-    var divLogfiles = document.getElementById("logiles").getElementsByClassName("mdl-card__supporting-text")[0];
+    var divLogfiles = document.getElementById("logfiles").getElementsByClassName("mdl-card__supporting-text")[0];
     while (divLogfiles.firstChild) {
         divLogfiles.removeChild(divLogfiles.firstChild);
     }
