@@ -614,7 +614,7 @@ function viewLogfiles() {
     for (var i = 0; i < all.logfiles.length; ++i) {
         divLogfiles.appendChild(htmlToElement(
             templateLogfiles.replace("specPath",all.logfiles[i].path)
-                            .replace("specExtract",all.logfiles[i].extract)
+                            .replace("specExtract",all.logfiles[i].extract.replace(/(?:\r\n|\r|\n)/g, '<br/>'))
                             ));
         }
     }
