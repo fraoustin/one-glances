@@ -39,6 +39,8 @@ class Plugin(GlancesPlugin):
         self.config=None
         # We want to display the stat in the curse interface
         self.display_curse = False
+        self._last_datetimeupdate = None
+        self._last_stats = []
 
     @GlancesPlugin._check_decorator
     @GlancesPlugin._log_result_decorator
@@ -46,19 +48,24 @@ class Plugin(GlancesPlugin):
         """Update swap memory stats using the input method."""
         self.stats = []
         if self.config is not None and self.config.has_section('publicip'):
-            i=0
-            while self.config.get_value('publicip', 'domain%s' % i, None) != None:
-                domain = self.config.get_value('publicip', 'domain%s' % i)
-                ip = "0.0.0.0"
-                try:
-                    if domain in ["local", "localhost", "127.0.0.1"]:
-                        ip=json.loads(urllib.urlopen("http://ip.jsontest.com/").read())["ip"]
-                    else:
-                        ip=socket.gethostbyname(domain)
-                except:
-                    pass
-                self.stats.append({"domain":domain, "ip":ip, "datetime":str(datetime.now())})
-                i += 1
+            if self._last_datetimeupdate == None or (datetime.now()-self._last_datetimeupdate).total_seconds() > self.config.get_value('publicip', 'delta', 600):
+                i=0
+                self._last_datetimeupdate = datetime.now()
+                while self.config.get_value('publicip', 'domain%s' % i, None) != None:
+                    domain = self.config.get_value('publicip', 'domain%s' % i)
+                    ip = "0.0.0.0"
+                    try:
+                        if domain in ["local", "localhost", "127.0.0.1"]:
+                            ip=json.loads(urllib.urlopen("http://ip.jsontest.com/").read())["ip"]
+                        else:
+                            ip=socket.gethostbyname(domain)
+                    except:
+                        pass
+                    self.stats.append({"domain":domain, "ip":ip, "datetime":str(datetime.now())})
+                    i += 1
+                self._last_stats=self.stats
+            else:
+                self.stats = self._last_stats
         return self.stats
 
 
