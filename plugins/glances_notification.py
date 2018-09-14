@@ -35,7 +35,7 @@ except:
 import smtplib
 
 url_smsapi_free = "https://smsapi.free-mobile.fr/sendmsg?"
-notify = []
+
 
 def sms(user, key, msg):
     """ send sms to user by free mobile"""
@@ -82,6 +82,7 @@ class Plugin(GlancesPlugin):
         self.config=None
         # We want to display the stat in the curse interface
         self.display_curse = False
+        self._old_status = []
 
     @GlancesPlugin._check_decorator
     @GlancesPlugin._log_result_decorator
@@ -90,39 +91,40 @@ class Plugin(GlancesPlugin):
         self.stats = []
         if self.config is not None and self.config.has_section('notification'):
             i=0
-            if len(notify) == i:
-                notify.append(False)
             while self.config.get_value('notification', 'test%s' % i, None) != None:
-                test = self.config.get_value('notification', 'test%s' % i)
-                title = self.config.get_value('notification', 'title%s' % i)
+                if len(self._old_status) == i:
+                    self._old_status.append(False)
+                test = self.config.get_value('notification', 'test%s' % i, "1==1")
+                title = self.config.get_value('notification', 'title%s' % i, "Without title")
                 status = False
                 result = ""
                 try:
                     if glances.mode.__class__.__name__ == 'GlancesWebServer':
                         stat = glances.mode.stats.getAllAsDict()
                         status = eval(test)
-                        if status == True :
-                            if notify[i] == False:
-                                j=0
-                                while self.config.get_value('notification', 'email%s-%s' % (i,j), None) != None:
-                                    user, password, smtp = self.config.get_value('notification', 'email%s-%s' % (i,j)).split(';')
-                                    msg = 'CRITICAL %s' % title
-                                    print(email(user, password, smtp, msg, title))
-                                    j=j+1
-                                j=0
-                                while self.config.get_value('notification', 'sms%s-%s' % (i,j), None) != None:
-                                    user, key = self.config.get_value('notification', 'sms%s-%s' % (i,j)).split(';')
-                                    msg = 'CRITICAL %s' % title
-                                    print(sms(user, key, msg))
-                                    j=j+1
-                            notify[i] = True
-                        else:
-                            notify[i] = False
+                        if status != self._old_status[i]:
+                            status_msg= "CRITICAL"
+                            if status == False:
+                                status_msg= "OK"
+
+                            j=0
+                            while self.config.get_value('notification', 'email%s-%s' % (i,j), None) != None:
+                                user, password, smtp = self.config.get_value('notification', 'email%s-%s' % (i,j)).split(';')
+                                msg = '%s %s' % (status_msg,title)
+                                print(email(user, password, smtp, msg, title))
+                                j=j+1
+                            j=0
+                            while self.config.get_value('notification', 'sms%s-%s' % (i,j), None) != None:
+                                user, key = self.config.get_value('notification', 'sms%s-%s' % (i,j)).split(';')
+                                msg = '%s %s' % (status_msg,title)
+                                print(sms(user, key, msg))
+                                j=j+1
+                        self._old_status[i] = status
                     else:
                         pass
                 except Exception as e:
                     result = str(e)
-                self.stats.append({"title":title, "status":status, "datetime":str(datetime.now()), "result":result})
+                self.stats.append({"title":title, "status":status, "datetime":str(datetime.now()), "result":result, "test":test})
                 i += 1
         return self.stats
 
