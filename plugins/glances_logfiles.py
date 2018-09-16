@@ -21,6 +21,9 @@
 
 from glances.plugins.glances_plugin import GlancesPlugin
 import sys
+from datetime import datetime
+import time
+import os.path
 
 import glances
 
@@ -55,7 +58,12 @@ class Plugin(GlancesPlugin):
                         extract=split.join(content.split(split)[-1*ln:])
                 except:
                     pass
-                self.stats.append({"path":path, "split":split, "ln":ln, "extract":extract})
+                self.stats.append({"path": path, 
+                                   "split": split,
+                                   "ln": ln,
+                                   "extract": extract,
+                                   "mtime": time.ctime(os.path.getmtime(path)),
+                                   "mtimedelta": int(time.time() - os.path.getmtime(path))})
                 i += 1
         return self.stats
 
