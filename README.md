@@ -55,3 +55,31 @@ your docker-compose
             environment:
                 - GLANCES_OPT=-w
             restart: always
+
+## plugin glances
+
+You can copy plugins/* in your glances directory glances/plugins/
+
+You have to install speedtest-cli module 
+
+    pip install speedtest-cli
+
+You can add parameter in glances.conf
+
+    [logfiles]
+    path0=/log/backup.log
+    split0=####################\n
+    ln0=1
+    path1=/log/syslog
+    path2=/log/maj_cert.log
+    split2=####################\n
+    ln2=1
+     
+    [publicip]
+    domain0=fraoustin.fr
+    
+    [notification]
+    test0=stat['publicip'][0]['ip'] != stat['ip']['public_address']
+    title0=Check ip fraoustin.fr
+    email0-0=fraoustin@gmail.com;XXXXXXXX;smtp.gmail.com:587
+

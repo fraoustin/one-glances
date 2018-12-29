@@ -20,14 +20,11 @@
 """foo plugin."""
 
 from glances.plugins.glances_plugin import GlancesPlugin
-import sys
+import random
+
 
 import threading
-try:
-    import speedtest
-except:
-    print("you have to install speedtest by pip install speedtest-cli")
-    sys.exit(1)
+import speedtest
 import time
 from datetime import datetime
 
